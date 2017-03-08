@@ -42,7 +42,7 @@
                         <div class="card-footer">
                             <div class="stats">
                                 <i class="material-icons">local_offer</i>
-                                Updated
+                                Last Updated: 2mins ago
                             </div>
                         </div>
                     </div>

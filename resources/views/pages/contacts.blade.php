@@ -70,15 +70,9 @@
 	                            </div>
 	                        </div>
 	                    </div>
-						<div class="col-md-4">
                           
-            @endsection
-            
-            @section('make-call')
-                @parent
-            @endsection
-        </div>
-    </div>
+            </div>
+@endsection
 
 @section('footer')
     @parent
@@ -86,7 +80,7 @@
 
 @section('scripts')
 <script>
-/** CHeck box Script **/
+/** Check box Script **/
     $('#checkAll').change(function(){
                var theRest = $('.table tbody tr td :checkbox');
                 

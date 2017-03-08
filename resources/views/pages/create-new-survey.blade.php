@@ -39,6 +39,14 @@
 												</div>
 	                                        </div>
 	                                    </div>
+	                                    <div class="row">
+	                                        <div class="col-md-12">
+												<div class="form-group label-floating">
+													<label class="control-label">Introduction</label>
+                                                    <textarea class="form-control" name="surveyIntro" placeholder="Write a brief introduction for this survey" ></textarea>
+												</div>
+	                                        </div>
+	                                    </div>
                                         <div id="thequestion">
                                             <div class="title">
                                                 <h4>Survey Questions</h4>
@@ -47,7 +55,7 @@
                                                 <div class="col-md-12">
                                                     <div class="form-group label-floating">
                                                         <label class="control-label">1. Question</label>
-                                                        <textarea class="form-control" name="question" ></textarea>
+                                                        <textarea class="form-control" name="question" placeholder="Enter your question" ></textarea>
                                                     </div>
                                                 </div>
                                             </div>
@@ -82,7 +90,6 @@
                           
             @endsection
             
-            @section('make-call')
         </div>
     </div>
 

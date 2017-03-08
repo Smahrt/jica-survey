@@ -33,7 +33,7 @@
             @section('sidebar')
                 <div class="sidebar" data-color="orange" data-image="{{ asset('assets/img/sidebar-1.jpg') }}">
                     <div class="logo">
-                        <a href="#" class="simple-text">
+                        <a href="{{ url() }}" class="simple-text">
                             JICA DC
                         </a>
                     </div>
@@ -41,32 +41,26 @@
                     <div class="sidebar-wrapper">
                         <ul class="nav">
                             <li>
-                                <a href="/">
+                                <a href="{{ url() }}">
                                     <i class="material-icons">dashboard</i>
                                     <p>Dashboard</p>
                                 </a>
                             </li>
                             <li>
-                                <a href="contacts">
+                                <a href="{{ url('/contacts') }}">
                                     <i class="material-icons">account_box</i>
                                     <p>Contacts</p>
                                 </a>
                             </li>
                             <li>
-                                <a href="surveys">
+                                <a href="{{ url('/surveys') }}">
                                     <i class="material-icons">content_paste</i>
                                     <p>Surveys</p>
                                </a>
                             </li>
-                            <li>
-                                <a href="survey/2/results">
-                                    <i class="material-icons">content_paste</i>
-                                    <p>View Survey Responses</p>
-                               </a>
-                            </li>
                             <li class="active-pro">
-                                <a href="create-new-survey">
-                                    <p>CREATE SURVEY</p>
+                                <a href="{{ url('/create-new-survey') }}">
+                                    <p>MAKE CALL</p>
                                 </a>
                             </li>
                         </ul>
@@ -85,32 +79,25 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="#">Dashboard</a>
+                            <a class="navbar-brand" href="{{ url() }}">Dashboard</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-right">
-                                <!-- Notifications
-                                <li class="dropdown">
-                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                        <i class="material-icons">notifications</i>
-                                        <span class="notification">5</span>
-                                        <p class="hidden-lg hidden-md">Notifications</p>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a href="#">Mike John responded to your email</a></li>
-                                        <li><a href="#">You have 5 new tasks</a></li>
-                                        <li><a href="#">You're now friend with Andrew</a></li>
-                                        <li><a href="#">Another Notification</a></li>
-                                        <li><a href="#">Another One</a></li>
-                                    </ul>
-                                </li>
-                                -->
                                 <li class="dropdown">
                                     <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                        <i class="material-icons">person</i>
-                                       <p class="hidden-lg hidden-md">Profile</p>
+                                       <p>My Name</p>
                                    </a>
                                     <ul class="dropdown-menu">
+                                        <li>
+                                            <a href="{{ url() }}">Dashboard</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ url('/surveys') }}">Surveys</a>
+                                        </li>
+                                        <li>
+                                            <a href="{{ url('/contacts') }}">Contacts</a>
+                                        </li>
                                         <li>
                                             <a href="#">Logout</a>
                                         </li>
@@ -178,7 +165,7 @@
                                     </form>
                                 </div>
                             </div>
-                        @show
+                        @endsection
                     </div>
 
                 </div>
