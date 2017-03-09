@@ -24,6 +24,13 @@
 
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="{{ asset('assets/css/demo.css') }}" rel="stylesheet" />
+        
+    <!-- Datatables -->
+    
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/libs/DataTables/jquery.dataTables.css?1423553989') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/libs/DataTables/extensions/dataTables.colVis.css?1423553990') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/libs/DataTables/extensions/dataTables.tableTools.css?1423553990') }}" />
+
 
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
@@ -143,8 +150,8 @@
                                                         <option value="+2348050367060">Mr. Shola</option>
                                                         <option value="+2348137809477">Dawn</option>
                                                         
-                                                        @foreach($result as $user)
-                                                        <option value="{{$user->phone_number}}">{{$user->officer_name}}</option>
+                                                        @foreach($res_contact as $user)
+                                                        <option value="{{ $user->phone_number }}">{{ $user->officer_name }}</option>
                                                         @endforeach
                                                     </select>
                                                     
@@ -159,6 +166,9 @@
                                                     <select id="contact-group" class="form-control">
                                                         <option selected disabled>Select Contact Group</option>
                                                         
+                                                        @foreach($res_con_type as $user_g)
+                                                        <option value="{{ $user_g->id }}">{{ $user_g->type }}</option>
+                                                        @endforeach
                                                         
                                                     </select>
                                                 </div>
@@ -167,10 +177,14 @@
 
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="form-group label-floating">
+                                                <div class="form-group">
                                                     <label class="control-label">Select Survey</label>
                                                     <select class="form-control" name="survey">
-                                                        <option value="1">PHC Board Report</option>
+                                                        <option disabled selected>Select Survey</option>
+                                                        
+                                                        @foreach($res_survey as $survey)
+                                                        <option value="{{ $survey->id }}">{{ $survey->title }}</option>
+                                                        @endforeach
                                                     </select>
                                                 </div>
                                             </div>
@@ -232,6 +246,12 @@
 
 	<!-- Material Dashboard DEMO methods, don't include it in your project! -->
 	<script src="{{ asset('assets/js/demo.js') }}"></script>
+    
+    <!-- Datatables -->
+    <script src="{{ asset('assets/js/libs/DataTables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/DataTables/extensions/ColVis/js/dataTables.colVis.min.js') }}"></script>
+    <script src="{{ asset('assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js') }}"></script>
+
     
     @yield('scripts')
 </html>

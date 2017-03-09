@@ -34,7 +34,7 @@
                                     </p>
 	                            </div>
 	                            <div class="card-content table-responsive">
-	                                <table class="table">
+	                                <table id="contactTable" class="table">
 	                                    <thead class="text-primary">
 	                                       <tr>
                                                 <th>
@@ -48,7 +48,7 @@
 	                                       </tr>
                                         </thead>
 	                                    <tbody>
-                                            @foreach ($result as $user_array)
+                                            @foreach ($res_contact as $user_array)
                                             <tr>
                                                 <td>
                                                     <input type="checkbox" name="optionsCheckboxes" class="checkContact checkbox-me">
@@ -81,7 +81,6 @@
     @parent
 @endsection
 
-@section('scripts')
 <script>
 /** Check box Script **/
     $('#checkAll').change(function(){
@@ -93,5 +92,17 @@
                     theRest.attr("checked", false);
                 }
             });
+    
+    $('#contactTable').DataTable( {
+        "dom": 'lCfrtip',
+         "order": [],
+        "language": {
+            "lengthMenu": '_MENU_ entries per page',
+            "search": '<i class="fa fa-search"></i>',
+            "paginate": {
+                "previous": '<i class="fa fa-angle-left"></i>',
+                "next": '<i class="fa fa-angle-right"></i>'
+            }
+        }
+    } );
 </script>
-@endsection

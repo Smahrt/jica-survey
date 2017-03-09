@@ -39,7 +39,7 @@
                                         <span>View Survey Responses</span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        @foreach($result as $surfn)
+                                        @foreach($res_survey as $surfn)
 
                                         <!--Here--><li><a href="{{ url('/surveys//results') }}">{{ $surfn->title }}</a></li>
 
@@ -57,7 +57,7 @@
 	                            </div>
 	                            <div class="card-content">
                                     <ul class="list divider-full-bleed">
-                                        @foreach ($result as $surf)
+                                        @foreach ($res_survey as $surf)
                                         <li class="tile ink-reaction">
                                             <a class="tile-content ink-reaction">
                                                 <div class="tile-text">
