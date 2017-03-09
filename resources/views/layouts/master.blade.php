@@ -127,13 +127,18 @@
                                             <div class="col-md-5 col-sm-6">
                                                 <div class="form-group">
                                                     <label class="control-label">Select Contact</label>
+                                                    
                                                     <select id="contacts" name="phone_number" data-live-search="true" class="form-control">
+                                                        
                                                         <option disabled selected>Select Contact</option>
                                                         <option value="+2348182362521">Yoshito Kawakatsu</option>
                                                         <option value="+2349095953951">Smahrt</option>
                                                         <option value="+2348050367060">Mr. Shola</option>
                                                         <option value="+2348137809477">Dawn</option>
+                                                        
+                                                       
                                                     </select>
+                                                    
                                                 </div>
                                             </div>
                                             <div class="col-md-1">
@@ -144,6 +149,7 @@
                                                     <label class="control-label">Select Contact Group</label>
                                                     <select id="contact-group" class="form-control">
                                                         <option selected disabled>Select Contact Group</option>
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
