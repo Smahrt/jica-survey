@@ -111,8 +111,6 @@
             @endsection
             
             @section('make-call')
-                @parent
-            @endsection
         </div>
     </div>
 

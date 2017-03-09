@@ -2794,6 +2794,7 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 .modal-content {
   box-shadow: 0 27px 24px 0 rgba(0, 0, 0, 0.2), 0 40px 77px 0 rgba(0, 0, 0, 0.22);
   border-radius: 6px;
+    padding: 20px;
   border: none;
 }
 .modal-content .modal-header {
@@ -2837,8 +2838,17 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
 
 .modal-backdrop {
   background: rgba(0, 0, 0, 0.3);
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: block;
 }
-
+#callModal{
+    z-index: 1;
+}
 .modal .modal-dialog {
   margin-top: 100px;
 }
@@ -4695,6 +4705,7 @@ footer .btn {
   .navbar-transparent {
     padding-top: 15px;
     background-color: rgba(0, 0, 0, 0.45);
+      box-shadow: none;
   }
 
   body {

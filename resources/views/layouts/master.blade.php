@@ -59,7 +59,7 @@
                                </a>
                             </li>
                             <li class="active-pro">
-                                <a href="{{ url('/create-new-survey') }}">
+                                <a href="#" data-toggle="modal" data-target="#callModal">
                                     <p>MAKE CALL</p>
                                 </a>
                             </li>
@@ -79,14 +79,14 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="{{ url() }}">Dashboard</a>
+                            <a class="navbar-brand">@yield('title')</a>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-right">
                                 <li class="dropdown">
                                     <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                        <i class="material-icons">person</i>
-                                       <p>My Name</p>
+                                       <p class="hidden-lg hidden-md">My Name</p>
                                    </a>
                                     <ul class="dropdown-menu">
                                         <li>
@@ -113,16 +113,19 @@
                     <div class="container-fluid">
                         @yield('content')
                         
-                        @section('make-call')
-                            
-                            <div class="card">
-                                <div class="card-header" data-background-color="orange">
-                                    <h4 class="title">Make a Call</h4>
-                                    <p class="category">Start a new survey by calling a contact or selecting a contact group</p>
-                                </div>
-
-                                <div class="card-content">
+                        <!-- BEGIN CALL MODAL -->
+                        <div class="modal fade" id="callModal" tabindex="-1" role="dialog" aria-labelledby="callModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                        <h4 class="modal-title" id="simpleModalLabel">Make a Call</h4>
+                                        <p class="category">Start a new survey by calling a contact or selecting a contact group</p>
+                                    </div>
+                                    
                                     <form action="{{url('/call')}}" method="post">
+                                        <div class="modal-body">
                                         <div class="row">
                                             <div class="col-md-5 col-sm-6">
                                                 <div class="form-group">
@@ -160,12 +163,20 @@
                                             </div>
                                         </div>
 
-                                        <button type="submit" name="submit" value="submit" class="btn btn-warning pull-right">Start Survey</button>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                                            <button type="submit" name="submit" value="submit" class="btn btn-warning pull-right">Start Survey</button>
                                         <div class="clearfix"></div>
+                                        </div>
                                     </form>
-                                </div>
-                            </div>
-                        @endsection
+                                </div><!-- /.modal-content -->
+                                    
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                        <!-- END CALL MODAL MARKUP -->
+
                     </div>
 
                 </div>
