@@ -22,8 +22,8 @@ class SurveyController extends Controller
     {
 
         $AccountSid = "ACbbb2bdc97932964b709697702be99690";
-    $AuthToken = "ee536c11385b0bd9864687b90f49cd41";
-    $client = new Client($AccountSid, $AuthToken);
+        $AuthToken = "ee536c11385b0bd9864687b90f49cd41";
+        $client = new Client($AccountSid, $AuthToken);
         $survey = Survey::find($surveyId);
         $responsesByCall = QuestionResponse::responsesForSurveyByCall($surveyId)
                          ->get()

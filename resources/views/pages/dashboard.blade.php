@@ -24,9 +24,9 @@
     }*/
     ?>
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-3 col-md-3 col-sm-3">
                     <div class="card card-stats">
                         <div class="card-header" data-background-color="purple">
                             <i class="material-icons">content_paste</i>
@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-3 col-md-3 col-sm-3">
                     <div class="card card-stats">
                         <div class="card-header" data-background-color="green">
                             <i class="material-icons">call</i>
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-3 col-md-3 col-sm-3">
                     <div class="card card-stats">
                         <div class="card-header" data-background-color="red">
                             <i class="material-icons">group</i>
@@ -79,12 +79,13 @@
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-
+                                <i class="material-icons">local_offer</i>
+                                Last Updated: 2mins ago
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-3 col-md-3 col-sm-3">
                     <div class="card card-stats">
                         <div class="card-header" data-background-color="blue">
                             <i class="material-icons">account_box</i>
@@ -99,7 +100,8 @@
                         </div>
                         <div class="card-footer">
                             <div class="stats">
-
+                                <i class="material-icons">local_offer</i>
+                                Last Updated: 2mins ago
                             </div>
                         </div>
                     </div>

@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="sidebar-wrapper">
-                        <ul class="nav">
+                        <ul id="main-nav" class="nav">
                             <li>
                                 <a href="{{ url() }}">
                                     <i class="material-icons">dashboard</i>
@@ -60,7 +60,7 @@
                             </li>
                             <li class="active-pro">
                                 <a href="#" data-toggle="modal" data-target="#callModal">
-                                    <p>MAKE CALL</p>
+                                    <p>START SURVEY</p>
                                 </a>
                             </li>
                         </ul>
