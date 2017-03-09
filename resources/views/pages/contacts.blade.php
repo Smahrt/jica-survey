@@ -1,5 +1,7 @@
 @extends('layouts.master')
 @section('title', 'Contacts')
+<?php use App\Http\Controllers\MainController; ?>
+
 
 @section('sidebar')
     @parent
@@ -22,7 +24,8 @@
     */
     ?>
 	                <div class="row">
-	                    <div class="col-md-8">
+                        <div class="col-md-1"></div>
+	                    <div class="col-md-10">
                             <div class="card">
 	                            <div class="card-header" data-background-color="orange">
 	                                <h4 class="title">Contacts</h4>
@@ -53,7 +56,7 @@
                                                 <td>{{ $user_array->officer_name }}</td>
                                                 <td>{{ $user_array->phc_name }}</td>
                                                 <td>{{ $user_array->phone_number }}</td>
-                                                <td>{{ $user_array->type }}</td>
+                                                <td><?php MainController::showContactGroups($user_array->contact_type_id); ?></td>
 	                                        	<td class="td-actions text-right">
                                                     <button type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
                                                         <i class="material-icons">edit</i>
@@ -70,7 +73,7 @@
 	                            </div>
 	                        </div>
 	                    </div>
-                          
+                        <div class="col-md-1"></div> 
             </div>
 @endsection
 
