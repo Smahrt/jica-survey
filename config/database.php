@@ -74,7 +74,7 @@ return [
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => 'localhost',
-            'database'  => 'jicadc_db',
+            'database'  => 'jicadc',
             'username'  => 'root',
             'password'  => '',
             'charset'   => 'utf8',
