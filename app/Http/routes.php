@@ -86,25 +86,23 @@ Route::post(
 
 //My Routes
 
-Route::get('/',function(){
+Route::get('/','MainController@getContactsQuery',function(){
     return view('pages.dashboard');
 });
 
-Route::get('/dashboard',function(){
+Route::get('/dashboard','MainController@getContactsQuery',function(){
     return view('pages.dashboard');
 });
 
-Route::get('/contacts', function () {
+Route::get('/contacts','MainController@getContacts','MainController@getContactsQuery', function () {
     return view('pages.contacts');
 });
 
-Route::get('/surveys', function () {
+Route::get('/surveys','MainController@getSurveys','MainController@getContactsQuery', function () {
     return view('pages.surveys');
 });
 
-Route::get('/create-new-survey', function () {
+Route::get('/create-new-survey','MainController@getContactsQuery', function () {
     return view('pages.create-new-survey');
 });
 
-Route::get('/contacts','MainController@getContacts');
-Route::get('/surveys','MainController@getSurveys');

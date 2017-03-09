@@ -14,6 +14,17 @@ class MainController extends Controller
        return view('pages.contacts', ['result'=>$result]);
     }
     
+    public static function getContactsQuery(){
+       $result = DB::select('SELECT * FROM contacts JOIN contact_type ON contacts.contact_type_id = contact_type.id');
+        return view('layouts.master', ['result'=>$result]);
+    }
+    
+    public static function getContactType(){
+       $res_type = DB::select('SELECT * FROM contact_type');
+        return view('layouts.master', ['res_type'=>$res_type]);
+    }
+    
+    
     public function getSurveys(){
         $result = DB::select('SELECT * FROM surveys');
         return view('pages.surveys', ['result'=>$result]);

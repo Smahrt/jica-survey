@@ -1,3 +1,7 @@
+<?php 
+    use App\Http\Controllers\MainController;
+?>
+
 <html>
     <head>
 	<meta charset="utf-8" />
@@ -139,7 +143,9 @@
                                                         <option value="+2348050367060">Mr. Shola</option>
                                                         <option value="+2348137809477">Dawn</option>
                                                         
-                                                       
+                                                        @foreach($result as $user)
+                                                        <option value="{{$user->phone_number}}">{{$user->officer_name}}</option>
+                                                        @endforeach
                                                     </select>
                                                     
                                                 </div>
@@ -152,6 +158,7 @@
                                                     <label class="control-label">Select Contact Group</label>
                                                     <select id="contact-group" class="form-control">
                                                         <option selected disabled>Select Contact Group</option>
+                                                        
                                                         
                                                     </select>
                                                 </div>
