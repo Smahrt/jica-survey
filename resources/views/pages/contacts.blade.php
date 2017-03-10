@@ -26,6 +26,33 @@
 	                <div class="row">
                         <div class="col-md-1"></div>
 	                    <div class="col-md-10">
+                            <ul class="nav navbar-nav navbar-right">
+                                <li>
+                                    <a href="" class="btn btn-success">
+                                       <i class="material-icons">person</i>
+                                       <span>Create New Contact</span>
+                                    </a>
+                                </li>
+                                <li  style="margin: 0 0 0 10;" >
+                                    <a href="#" class="btn btn-success dropdown-toggle" data-toggle="dropdown" >
+                                        <i class="material-icons">group</i>
+                                        <span>Create Contact Group</span>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        @foreach($res_con_type as $contactGrp)
+
+                                        <!--Here--><li><a href="{{ url('/surveys//results') }}">{{ $contactGrp->type }}</a></li>
+
+                                        @endforeach
+                                    </ul>
+                                </li>
+                                <li style="margin: 0 0 0 10;">
+                                    <a href="" class="btn btn-success">
+                                       <i class="material-icons">edit</i>
+                                       <span>Edit Contact Group</span>
+                                    </a>
+                                </li>
+                            </ul>
                             <div class="card">
 	                            <div class="card-header" data-background-color="orange">
 	                                <h4 class="title">Contacts</h4>

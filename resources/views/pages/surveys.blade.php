@@ -33,7 +33,7 @@
                                        <span>Create New Survey</span>
                                     </a>
                                 </li>
-                                <li  style="margin: 0 0 0 10px;" class="dropdown">
+                                <li  style="margin-left: 10px;" class="dropdown">
                                     <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">
                                         <i class="material-icons">notifications</i>
                                         <span>View Survey Responses</span>
