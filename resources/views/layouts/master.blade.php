@@ -13,71 +13,16 @@
 
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     <meta name="viewport" content="width=device-width" />
- 
-
-    <!-- Bootstrap core CSS     -->
-    <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet" />
-
-    <!--  Material Dashboard CSS    -->
-    <link href="{{ asset('assets/css/material-dashboard.css') }}" rel="stylesheet"/>
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap-select.min.css') }}">
-
-    <!--  CSS for Demo Purpose, don't include it in your project     -->
-    <link href="{{ asset('assets/css/demo.css') }}" rel="stylesheet" />
-        
-    <!-- Datatables -->
     
-    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/libs/DataTables/jquery.dataTables.css?1423553989') }}" />
-    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/libs/DataTables/extensions/dataTables.colVis.css?1423553990') }}" />
-    <link type="text/css" rel="stylesheet" href="{{ asset('assets/css/libs/DataTables/extensions/dataTables.tableTools.css?1423553990') }}" />
-
-
-    <!--     Fonts and icons     -->
-    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <!-- <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'> -->
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/material-icons.css') }}">
+    @include('layouts.style')
+        
 </head>
     
     
     <body>
         <div class="wrapper">
-            @section('sidebar')
-                <div class="sidebar" data-color="orange" data-image="{{ asset('assets/img/sidebar-1.jpg') }}">
-                    <div class="logo">
-                        <a href="{{ url() }}" class="simple-text">
-                            JICA DC
-                        </a>
-                    </div>
-
-                    <div class="sidebar-wrapper">
-                        <ul id="main-nav" class="nav">
-                            <li>
-                                <a href="{{ url() }}">
-                                    <i class="material-icons">dashboard</i>
-                                    <p>Dashboard</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/contacts') }}">
-                                    <i class="material-icons">account_box</i>
-                                    <p>Contacts</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ url('/surveys') }}">
-                                    <i class="material-icons">content_paste</i>
-                                    <p>Surveys</p>
-                               </a>
-                            </li>
-                            <li class="active-pro">
-                                <a href="#" data-toggle="modal" data-target="#callModal">
-                                    <p>START SURVEY</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            @show
+            
+            @include('layouts.sidebar')
             
             <div class="main-panel">
                 
@@ -122,91 +67,15 @@
 
                 <div class="content">
                     <div class="container-fluid">
+                        
                         @yield('content')
                         
-                        <!-- BEGIN CALL MODAL -->
-                        <div class="modal fade" id="callModal" tabindex="-1" role="dialog" aria-labelledby="callModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                        <h4 class="modal-title" id="simpleModalLabel">Make a Call</h4>
-                                        <p class="category">Start a new survey by calling a contact or selecting a contact group</p>
-                                    </div>
-                                    
-                                    <form action="{{url('/call')}}" method="post">
-                                        <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-md-5 col-sm-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Contact</label>
-                                                    
-                                                    <select id="contacts" name="phone_number" data-live-search="true" class="form-control">
-                                                        
-                                                        <option disabled selected>Select Contact</option>
-                                                        <option value="+2348182362521">Yoshito Kawakatsu</option>
-                                                        <option value="+2349095953951">Smahrt</option>
-                                                        <option value="+2348050367060">Mr. Shola</option>
-                                                        <option value="+2348137809477">Dawn</option>
-                                                        
-                                                        @foreach($res_contact as $user)
-                                                        <option value="{{ $user->phone_number }}">{{ $user->officer_name }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <p>OR</p>
-                                            </div>
-                                            <div class="col-md-6 col-sm-6">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Contact Group</label>
-                                                    <select id="contact-group" class="form-control">
-                                                        <option selected disabled>Select Contact Group</option>
-                                                        
-                                                        @foreach($res_con_type as $user_g)
-                                                        <option value="{{ $user_g->id }}">{{ $user_g->type }}</option>
-                                                        @endforeach
-                                                        
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Select Survey</label>
-                                                    <select class="form-control" name="survey">
-                                                        <option disabled selected>Select Survey</option>
-                                                        
-                                                        @foreach($res_survey as $survey)
-                                                        <option value="{{ $survey->id }}">{{ $survey->title }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                                            <button type="submit" name="submit" value="submit" class="btn btn-warning pull-right">Start Survey</button>
-                                        <div class="clearfix"></div>
-                                        </div>
-                                    </form>
-                                </div><!-- /.modal-content -->
-                                    
-                            </div><!-- /.modal-dialog -->
-                        </div><!-- /.modal -->
-                        <!-- END CALL MODAL MARKUP -->
-
+                        @include('layouts.start-survey')
+                        
                     </div>
 
                 </div>
+                
             @section('footer')
             <footer class="footer">
                 <div class="container-fluid">
@@ -215,43 +84,13 @@
                     </p>
                 </div>
             </footer>
-            @show 
+            @stop
+                
             </div>
         </div>
         
+        @include('layouts.script')
         
     </body>
     
-    
-	<!--   Core JS Files   -->
-	<script src="{{ asset('assets/js/jquery-3.1.0.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('assets/js/bootstrap.min.js') }}" type="text/javascript"></script>
-	<script src="{{ asset('assets/js/material.min.js') }}" type="text/javascript"></script>
-
-	<!--  Charts Plugin -->
-	<script src="{{ asset('assets/js/chartist.min.js') }}"></script>
-
-	<!--  Notifications Plugin    -->
-	<script src="{{ asset('assets/js/bootstrap-notify.js') }}"></script>
-
-	<!--  Google Maps Plugin    -->
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
-
-	<!-- Material Dashboard javascript methods -->
-	<script src="{{ asset('assets/js/material-dashboard.js') }}"></script>
-    
-    <!-- My Plugins -->
-    <script src="{{ asset('assets/js/bootstrap-select.min.js') }}"></script>
-    <script src="{{ asset('assets/js/myscript.js') }}"></script>
-
-	<!-- Material Dashboard DEMO methods, don't include it in your project! -->
-	<script src="{{ asset('assets/js/demo.js') }}"></script>
-    
-    <!-- Datatables -->
-    <script src="{{ asset('assets/js/libs/DataTables/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ asset('assets/js/libs/DataTables/extensions/ColVis/js/dataTables.colVis.min.js') }}"></script>
-    <script src="{{ asset('assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js') }}"></script>
-
-    
-    @yield('scripts')
 </html>

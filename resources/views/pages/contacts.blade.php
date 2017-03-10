@@ -108,7 +108,8 @@
     @parent
 @endsection
 
-<script>
+@section('scripts')
+<script type="text/javascript">
 /** Check box Script **/
     $('#checkAll').change(function(){
                var theRest = $('.table tbody tr td :checkbox');
@@ -133,3 +134,5 @@
         }
     } );
 </script>
+
+@stop

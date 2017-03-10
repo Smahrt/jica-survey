@@ -108,13 +108,8 @@
                 </div>
             </div>
         </div>
-        
-        <div class="col-md-5">
-            @endsection
-            
-            @section('make-call')
-        </div>
     </div>
+@endsection
 
 
         
