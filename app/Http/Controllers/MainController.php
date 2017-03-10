@@ -116,10 +116,14 @@ class MainController extends Controller
             $query_em = DB::select("SELECT * FROM users WHERE email ='$email'");
             $email_query[]="";
             
+             foreach($query_em as $queryDetails){
+                    $userName = $queryDetails->first_name;
+                }
+            
             $length = count($query_em);
             if($length == 0){
                 
-                $error_message = "Username/Password Invalid";
+                $error_message = "Email/Password Invalid";
                 return view('pages.login',['error_message' => $error_message]);
             }
             else{
@@ -130,10 +134,16 @@ class MainController extends Controller
                 }
                 
                 if($userPass == $password){
-                    return view('pages.dashboard');
+                    $query_em = DB::select("SELECT * FROM users WHERE email ='$email'");
+                    $email_query[]="";
+
+                     foreach($query_em as $queryDetails){
+                            $userName = $queryDetails->first_name;
+                        }
+                    return view('pages.dashboard',['userName'=>$userName]);
                 }
                 else{
-                  $error_message = "Username/ Invalid".$userPass;
+                  $error_message = "Email/Password Invalid".$userPass;
                     return view('pages.login',['error_message' => $error_message]);
                         
                 }

@@ -42,11 +42,16 @@
                                 <li class="dropdown">
                                     <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                        <i class="material-icons">person</i>
-                                       <p class="hidden-lg hidden-md">My Name</p>
+                                       <p class="">
+                                            @if(isset($userName)){
+                                                {!! $userName !!}
+                                           }     
+                                            @endif
+                                        </p>
                                    </a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="{{ url() }}">Dashboard</a>
+                                            <a href="{{ url('/dashboard') }}">Dashboard</a>
                                         </li>
                                         <li>
                                             <a href="{{ url('/surveys') }}">Surveys</a>
