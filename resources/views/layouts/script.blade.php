@@ -2,7 +2,6 @@
 	<script src="{{ asset('assets/js/jquery-3.1.0.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('assets/js/bootstrap.min.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('assets/js/material.min.js') }}" type="text/javascript"></script>
-
 	<!--  Charts Plugin -->
 	<script src="{{ asset('assets/js/chartist.min.js') }}"></script>
 
@@ -28,3 +27,8 @@
     <script src="{{ asset('assets/js/libs/DataTables/extensions/TableTools/js/dataTables.tableTools.min.js') }}"></script>
 
 @yield('scripts')
+
+<!--TRIAL-->
+
+
+

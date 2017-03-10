@@ -87,7 +87,11 @@ Route::post(
 //My Routes
 
 Route::get('/',function(){
-    return view('pages.dashboard');
+    return view('pages.login');
+});
+
+Route::get('/login',function(){
+    return view('pages.login');
 });
 
 Route::get('/dashboard',function(){
@@ -105,4 +109,11 @@ Route::get('/surveys', function () {
 Route::get('/create-new-survey', function () {
     return view('pages.create-new-survey');
 });
+
+//Login routes
+// route to show the login form
+//Route::get('login', array('uses' => 'MainController@showLogin'));
+
+// route to process the form
+Route::post('login', array('uses' => 'MainController@doLogin'));
 
