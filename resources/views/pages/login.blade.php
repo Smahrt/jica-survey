@@ -1,6 +1,7 @@
 <!-- app/views/login.blade.php -->
 @section('title', 'Login')
 
+
 <!doctype html>
 <html>
 <head>

@@ -42,12 +42,7 @@
                                 <li class="dropdown">
                                     <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                        <i class="material-icons">person</i>
-                                       <p class="">
-                                            @if(isset($userName)){
-                                                {!! $userName !!}
-                                           }     
-                                            @endif
-                                        </p>
+                                       <p class=""></p>
                                    </a>
                                     <ul class="dropdown-menu">
                                         <li>

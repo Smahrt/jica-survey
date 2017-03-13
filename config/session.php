@@ -12,11 +12,11 @@ return [
     | you may specify any of the other wonderful drivers provided here.
     |
     | Supported: "file", "cookie", "database", "apc",
-    |            "memcached", "redis", "array"
+    |            "memcached", "redis", "array", "SESSION_DRIVER"->native, env('database', 'file')
     |
     */
 
-    'driver' => env('SESSION_DRIVER', 'file'),
+    'driver' => 'database' ,
 
     /*
     |--------------------------------------------------------------------------

@@ -70,11 +70,25 @@ return [
             'database' => storage_path('database.sqlite'),
             'prefix'   => '',
         ],
-
+    
+        #primary connection
         'mysql' => [
             'driver'    => 'mysql',
             'host'      => 'localhost',
             'database'  => 'jicadc',
+            'username'  => 'root',
+            'password'  => '',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+    
+        #secondary connection
+        'mysql2' => [
+            'driver'    => 'mysql',
+            'host'      => 'localhost',
+            'database'  => 'cedarvie_ssem',
             'username'  => 'root',
             'password'  => '',
             'charset'   => 'utf8',

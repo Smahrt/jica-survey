@@ -23,12 +23,18 @@
 
     */
     ?>
+    <p>
+        @if(isset($success_message))
+             {!!$success_message !!}
+        @endif
+
+    </p>
 	                <div class="row">
                         <div class="col-md-1"></div>
 	                    <div class="col-md-10">
                             <ul class="nav navbar-nav navbar-right">
                                 <li>
-                                    <a href="" class="btn btn-success">
+                                    <a href="{{ url('create') }}" class="btn btn-success">
                                        <i class="material-icons">person</i>
                                        <span>Create New Contact</span>
                                     </a>
@@ -85,12 +91,16 @@
                                                 <td>{{ $user_array->phone_number }}</td>
                                                 <td><?php MainController::showContactGroups($user_array->contact_type_id); ?></td>
 	                                        	<td class="td-actions text-right">
-                                                    <button type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
+                                                    <a href="show/{{ $user_array->cid }}">
+                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
                                                         <i class="material-icons">edit</i>
-                                                    </button>
-                                                    <button type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
+                                                        </button>
+                                                    </a>
+                                                    <a href="show/{{ $user_array->cid }}">
+                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
                                                         <i class="material-icons">close</i>
-                                                    </button>
+                                                        </button>
+                                                    </a>
                                                 </td> 
                                             </tr>
                                             @endforeach
