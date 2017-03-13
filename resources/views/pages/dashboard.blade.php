@@ -19,6 +19,7 @@
                 </div>';
 
     }*/
+    echo $_COOKIE['login'];
     ?>
     <div class="row">
         <div class="col-md-12">
