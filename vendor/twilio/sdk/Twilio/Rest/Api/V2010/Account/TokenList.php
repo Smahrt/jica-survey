@@ -10,6 +10,7 @@
 namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\ListResource;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -23,35 +24,35 @@ class TokenList extends ListResource {
      */
     public function __construct(Version $version, $accountSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Tokens.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Tokens.json';
     }
 
     /**
      * Create a new TokenInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return TokenInstance Newly created TokenInstance
      */
-    public function create(array $options = array()) {
+    public function create($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'Ttl' => $options['ttl'],
         ));
-        
+
         $payload = $this->version->create(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new TokenInstance(
             $this->version,
             $payload,

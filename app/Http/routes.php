@@ -94,9 +94,7 @@ Route::post(
     return view('pages.login');
 });*/
 
-Route::get('/dashboard',function(){
-    return view('pages.dashboard');
-});
+Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'MainController@showDashboard']);
 
 Route::get('/contacts', function () {
     return view('pages.contacts');
@@ -113,13 +111,15 @@ Route::get('/create-new-survey', function () {
 //Login routes
 
 // route to show the login form
-Route::get('/', array('uses' => 'MainController@verifyUser'));
+Route::get('/',function () {
+    return view('pages.login');
+});
 
 // route to show the login form
-Route::get('/login',['as' => 'login', 'uses' => 'MainController@verifyUser']);
+Route::get('/signin', array('uses' => 'MainController@showDashboard'));
 
 // route to process the form
-Route::post('/login', array('uses' => 'MainController@doLogin'));
+Route::post('/signin', array('uses' => 'MainController@doLogin'));
 
 // route to the show-contacts page
 Route::get('/show/{id}', array('uses' => 'MainController@showContact'));
@@ -135,4 +135,8 @@ Route::get('show/delete/{id}', array('uses' => 'MainController@deleteContact'));
 
 // route to the Edit-contacts page
 Route::post('show/edit/{id}', array('uses' => 'MainController@editContact'));
+
+Route::post('/tts-survey', function(Request $request){
+    echo $request->surveyTitle;
+});
 

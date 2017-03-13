@@ -11,6 +11,7 @@ namespace Twilio\Rest\Api\V2010;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
+use Twilio\Options;
 use Twilio\Rest\Api\V2010\Account\AddressList;
 use Twilio\Rest\Api\V2010\Account\ApplicationList;
 use Twilio\Rest\Api\V2010\Account\AuthorizedConnectAppList;
@@ -27,7 +28,6 @@ use Twilio\Rest\Api\V2010\Account\NotificationList;
 use Twilio\Rest\Api\V2010\Account\OutgoingCallerIdList;
 use Twilio\Rest\Api\V2010\Account\QueueList;
 use Twilio\Rest\Api\V2010\Account\RecordingList;
-use Twilio\Rest\Api\V2010\Account\SandboxList;
 use Twilio\Rest\Api\V2010\Account\ShortCodeList;
 use Twilio\Rest\Api\V2010\Account\SigningKeyList;
 use Twilio\Rest\Api\V2010\Account\SipList;
@@ -55,7 +55,6 @@ use Twilio\Version;
  * @property \Twilio\Rest\Api\V2010\Account\OutgoingCallerIdList outgoingCallerIds
  * @property \Twilio\Rest\Api\V2010\Account\QueueList queues
  * @property \Twilio\Rest\Api\V2010\Account\RecordingList recordings
- * @property \Twilio\Rest\Api\V2010\Account\SandboxList sandbox
  * @property \Twilio\Rest\Api\V2010\Account\SigningKeyList signingKeys
  * @property \Twilio\Rest\Api\V2010\Account\SipList sip
  * @property \Twilio\Rest\Api\V2010\Account\ShortCodeList shortCodes
@@ -77,7 +76,6 @@ use Twilio\Version;
  * @method \Twilio\Rest\Api\V2010\Account\OutgoingCallerIdContext outgoingCallerIds(string $sid)
  * @method \Twilio\Rest\Api\V2010\Account\QueueContext queues(string $sid)
  * @method \Twilio\Rest\Api\V2010\Account\RecordingContext recordings(string $sid)
- * @method \Twilio\Rest\Api\V2010\Account\SandboxContext sandbox()
  * @method \Twilio\Rest\Api\V2010\Account\SigningKeyContext signingKeys(string $sid)
  * @method \Twilio\Rest\Api\V2010\Account\ShortCodeContext shortCodes(string $sid)
  * @method \Twilio\Rest\Api\V2010\Account\TranscriptionContext transcriptions(string $sid)
@@ -99,7 +97,6 @@ class AccountContext extends InstanceContext {
     protected $_outgoingCallerIds = null;
     protected $_queues = null;
     protected $_recordings = null;
-    protected $_sandbox = null;
     protected $_signingKeys = null;
     protected $_sip = null;
     protected $_shortCodes = null;
@@ -117,13 +114,13 @@ class AccountContext extends InstanceContext {
      */
     public function __construct(Version $version, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -133,13 +130,13 @@ class AccountContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new AccountInstance(
             $this->version,
             $payload,
@@ -150,24 +147,24 @@ class AccountContext extends InstanceContext {
     /**
      * Update the AccountInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return AccountInstance Updated AccountInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'FriendlyName' => $options['friendlyName'],
             'Status' => $options['status'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new AccountInstance(
             $this->version,
             $payload,
@@ -187,7 +184,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_addresses;
     }
 
@@ -203,7 +200,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_applications;
     }
 
@@ -219,7 +216,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_authorizedConnectApps;
     }
 
@@ -235,7 +232,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_availablePhoneNumbers;
     }
 
@@ -251,7 +248,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_calls;
     }
 
@@ -267,7 +264,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_conferences;
     }
 
@@ -283,7 +280,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_connectApps;
     }
 
@@ -299,7 +296,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_incomingPhoneNumbers;
     }
 
@@ -315,7 +312,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_keys;
     }
 
@@ -331,7 +328,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_messages;
     }
 
@@ -347,7 +344,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_newKeys;
     }
 
@@ -363,7 +360,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_newSigningKeys;
     }
 
@@ -379,7 +376,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_notifications;
     }
 
@@ -395,7 +392,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_outgoingCallerIds;
     }
 
@@ -411,7 +408,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_queues;
     }
 
@@ -427,24 +424,8 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
-        return $this->_recordings;
-    }
 
-    /**
-     * Access the sandbox
-     * 
-     * @return \Twilio\Rest\Api\V2010\Account\SandboxList 
-     */
-    protected function getSandbox() {
-        if (!$this->_sandbox) {
-            $this->_sandbox = new SandboxList(
-                $this->version,
-                $this->solution['sid']
-            );
-        }
-        
-        return $this->_sandbox;
+        return $this->_recordings;
     }
 
     /**
@@ -459,7 +440,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_signingKeys;
     }
 
@@ -475,7 +456,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_sip;
     }
 
@@ -491,7 +472,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_shortCodes;
     }
 
@@ -507,7 +488,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_tokens;
     }
 
@@ -523,7 +504,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_transcriptions;
     }
 
@@ -539,7 +520,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_usage;
     }
 
@@ -555,7 +536,7 @@ class AccountContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_validationRequests;
     }
 
@@ -571,7 +552,7 @@ class AccountContext extends InstanceContext {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -588,7 +569,7 @@ class AccountContext extends InstanceContext {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

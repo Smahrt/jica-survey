@@ -10,6 +10,8 @@
 namespace Twilio\Rest\IpMessaging\V1;
 
 use Twilio\ListResource;
+use Twilio\Options;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -22,10 +24,10 @@ class CredentialList extends ListResource {
      */
     public function __construct(Version $version) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array();
-        
+
         $this->uri = '/Credentials';
     }
 
@@ -49,9 +51,9 @@ class CredentialList extends ListResource {
      */
     public function stream($limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -70,7 +72,7 @@ class CredentialList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return CredentialInstance[] Array of results
      */
-    public function read($limit = null, $pageSize = Values::NONE) {
+    public function read($limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($limit, $pageSize), false);
     }
 
@@ -89,13 +91,13 @@ class CredentialList extends ListResource {
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new CredentialPage($this->version, $response, $this->solution);
     }
 
@@ -103,28 +105,29 @@ class CredentialList extends ListResource {
      * Create a new CredentialInstance
      * 
      * @param string $type The type
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return CredentialInstance Newly created CredentialInstance
      */
-    public function create($type, array $options = array()) {
+    public function create($type, $options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'Type' => $type,
             'FriendlyName' => $options['friendlyName'],
             'Certificate' => $options['certificate'],
             'PrivateKey' => $options['privateKey'],
-            'Sandbox' => $options['sandbox'],
+            'Sandbox' => Serialize::booleanToString($options['sandbox']),
             'ApiKey' => $options['apiKey'],
+            'Secret' => $options['secret'],
         ));
-        
+
         $payload = $this->version->create(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new CredentialInstance(
             $this->version,
             $payload

@@ -10,6 +10,7 @@
 namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\ListResource;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -24,35 +25,35 @@ class NewKeyList extends ListResource {
      */
     public function __construct(Version $version, $accountSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Keys.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Keys.json';
     }
 
     /**
      * Create a new NewKeyInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return NewKeyInstance Newly created NewKeyInstance
      */
-    public function create(array $options = array()) {
+    public function create($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'FriendlyName' => $options['friendlyName'],
         ));
-        
+
         $payload = $this->version->create(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new NewKeyInstance(
             $this->version,
             $payload,

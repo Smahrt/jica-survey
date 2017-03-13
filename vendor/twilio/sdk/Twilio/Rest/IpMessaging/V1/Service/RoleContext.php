@@ -24,14 +24,14 @@ class RoleContext extends InstanceContext {
      */
     public function __construct(Version $version, $serviceSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'serviceSid' => $serviceSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Services/' . $serviceSid . '/Roles/' . $sid . '';
+
+        $this->uri = '/Services/' . rawurlencode($serviceSid) . '/Roles/' . rawurlencode($sid) . '';
     }
 
     /**
@@ -41,13 +41,13 @@ class RoleContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new RoleInstance(
             $this->version,
             $payload,
@@ -68,23 +68,21 @@ class RoleContext extends InstanceContext {
     /**
      * Update the RoleInstance
      * 
-     * @param string $friendlyName The friendly_name
      * @param string $permission The permission
      * @return RoleInstance Updated RoleInstance
      */
-    public function update($friendlyName, $permission) {
+    public function update($permission) {
         $data = Values::of(array(
-            'FriendlyName' => $friendlyName,
             'Permission' => $permission,
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new RoleInstance(
             $this->version,
             $payload,

@@ -10,6 +10,8 @@
 namespace Twilio\Rest\Taskrouter\V1\Workspace;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -23,36 +25,36 @@ class WorkspaceStatisticsContext extends InstanceContext {
      */
     public function __construct(Version $version, $workspaceSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'workspaceSid' => $workspaceSid,
         );
-        
-        $this->uri = '/Workspaces/' . $workspaceSid . '/Statistics';
+
+        $this->uri = '/Workspaces/' . rawurlencode($workspaceSid) . '/Statistics';
     }
 
     /**
      * Fetch a WorkspaceStatisticsInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return WorkspaceStatisticsInstance Fetched WorkspaceStatisticsInstance
      */
-    public function fetch(array $options = array()) {
+    public function fetch($options = array()) {
         $options = new Values($options);
-        
+
         $params = Values::of(array(
             'Minutes' => $options['minutes'],
-            'StartDate' => $options['startDate'],
-            'EndDate' => $options['endDate'],
+            'StartDate' => Serialize::iso8601DateTime($options['startDate']),
+            'EndDate' => Serialize::iso8601DateTime($options['endDate']),
         ));
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new WorkspaceStatisticsInstance(
             $this->version,
             $payload,

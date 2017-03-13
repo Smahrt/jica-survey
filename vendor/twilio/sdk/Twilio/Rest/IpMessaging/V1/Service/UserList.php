@@ -10,6 +10,7 @@
 namespace Twilio\Rest\IpMessaging\V1\Service;
 
 use Twilio\ListResource;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -23,35 +24,39 @@ class UserList extends ListResource {
      */
     public function __construct(Version $version, $serviceSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'serviceSid' => $serviceSid,
         );
-        
-        $this->uri = '/Services/' . $serviceSid . '/Users';
+
+        $this->uri = '/Services/' . rawurlencode($serviceSid) . '/Users';
     }
 
     /**
      * Create a new UserInstance
      * 
      * @param string $identity The identity
-     * @param string $roleSid The role_sid
+     * @param array|Options $options Optional Arguments
      * @return UserInstance Newly created UserInstance
      */
-    public function create($identity, $roleSid) {
+    public function create($identity, $options = array()) {
+        $options = new Values($options);
+
         $data = Values::of(array(
             'Identity' => $identity,
-            'RoleSid' => $roleSid,
+            'RoleSid' => $options['roleSid'],
+            'Attributes' => $options['attributes'],
+            'FriendlyName' => $options['friendlyName'],
         ));
-        
+
         $payload = $this->version->create(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new UserInstance(
             $this->version,
             $payload,
@@ -79,9 +84,9 @@ class UserList extends ListResource {
      */
     public function stream($limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -100,7 +105,7 @@ class UserList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return UserInstance[] Array of results
      */
-    public function read($limit = null, $pageSize = Values::NONE) {
+    public function read($limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($limit, $pageSize), false);
     }
 
@@ -119,13 +124,13 @@ class UserList extends ListResource {
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new UserPage($this->version, $response, $this->solution);
     }
 

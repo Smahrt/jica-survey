@@ -22,10 +22,10 @@ class ServiceList extends ListResource {
      */
     public function __construct(Version $version) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array();
-        
+
         $this->uri = '/Services';
     }
 
@@ -39,14 +39,14 @@ class ServiceList extends ListResource {
         $data = Values::of(array(
             'FriendlyName' => $friendlyName,
         ));
-        
+
         $payload = $this->version->create(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new ServiceInstance(
             $this->version,
             $payload
@@ -73,9 +73,9 @@ class ServiceList extends ListResource {
      */
     public function stream($limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -94,7 +94,7 @@ class ServiceList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return ServiceInstance[] Array of results
      */
-    public function read($limit = null, $pageSize = Values::NONE) {
+    public function read($limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($limit, $pageSize), false);
     }
 
@@ -113,13 +113,13 @@ class ServiceList extends ListResource {
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new ServicePage($this->version, $response, $this->solution);
     }
 

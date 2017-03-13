@@ -10,6 +10,7 @@
 namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\ListResource;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -24,35 +25,35 @@ class NewSigningKeyList extends ListResource {
      */
     public function __construct(Version $version, $accountSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/SigningKeys.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/SigningKeys.json';
     }
 
     /**
      * Create a new NewSigningKeyInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return NewSigningKeyInstance Newly created NewSigningKeyInstance
      */
-    public function create(array $options = array()) {
+    public function create($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'FriendlyName' => $options['friendlyName'],
         ));
-        
+
         $payload = $this->version->create(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new NewSigningKeyInstance(
             $this->version,
             $payload,

@@ -25,15 +25,15 @@ class IpAccessControlListMappingContext extends InstanceContext {
      */
     public function __construct(Version $version, $accountSid, $domainSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
             'domainSid' => $domainSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/SIP/Domains/' . $domainSid . '/IpAccessControlListMappings/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/SIP/Domains/' . rawurlencode($domainSid) . '/IpAccessControlListMappings/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -44,13 +44,13 @@ class IpAccessControlListMappingContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new IpAccessControlListMappingInstance(
             $this->version,
             $payload,

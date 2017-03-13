@@ -24,13 +24,13 @@ class AvailablePhoneNumberCountryList extends ListResource {
      */
     public function __construct(Version $version, $accountSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/AvailablePhoneNumbers.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/AvailablePhoneNumbers.json';
     }
 
     /**
@@ -54,9 +54,9 @@ class AvailablePhoneNumberCountryList extends ListResource {
      */
     public function stream($limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -75,7 +75,7 @@ class AvailablePhoneNumberCountryList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return AvailablePhoneNumberCountryInstance[] Array of results
      */
-    public function read($limit = null, $pageSize = Values::NONE) {
+    public function read($limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($limit, $pageSize), false);
     }
 
@@ -95,13 +95,13 @@ class AvailablePhoneNumberCountryList extends ListResource {
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new AvailablePhoneNumberCountryPage($this->version, $response, $this->solution);
     }
 

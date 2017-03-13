@@ -18,17 +18,17 @@ use Twilio\Tests\Request;
 class RoleTest extends HolodeckTestCase {
     public function testFetchRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                           ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->fetch();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
             'https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles/RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        )));
+        ));
     }
 
     public function testFetchResponse() {
@@ -53,26 +53,26 @@ class RoleTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                                 ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->fetch();
-        
+
         $this->assertNotNull($actual);
     }
 
     public function testDeleteRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                           ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->delete();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'delete',
             'https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles/RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        )));
+        ));
     }
 
     public function testDeleteResponse() {
@@ -80,34 +80,34 @@ class RoleTest extends HolodeckTestCase {
             204,
             null
         ));
-        
+
         $actual = $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                                 ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->delete();
-        
+
         $this->assertTrue($actual);
     }
 
     public function testCreateRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                           ->roles->create("friendlyName", "channel", array('permission'));
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
+
         $values = array(
             'FriendlyName' => "friendlyName",
             'Type' => "channel",
             'Permission' => array('permission'),
         );
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'post',
             'https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles',
             null,
             $values
-        )));
+        ));
     }
 
     public function testCreateResponse() {
@@ -132,26 +132,26 @@ class RoleTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                                 ->roles->create("friendlyName", "channel", array('permission'));
-        
+
         $this->assertNotNull($actual);
     }
 
     public function testReadRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                           ->roles->read();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
             'https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles'
-        )));
+        ));
     }
 
     public function testReadFullResponse() {
@@ -161,10 +161,10 @@ class RoleTest extends HolodeckTestCase {
             {
                 "meta": {
                     "page": 0,
-                    "page_size": 1,
-                    "first_page_url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=1&Page=0",
+                    "page_size": 50,
+                    "first_page_url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=50&Page=0",
                     "previous_page_url": null,
-                    "url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=1&Page=0",
+                    "url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=50&Page=0",
                     "next_page_url": null,
                     "key": "roles"
                 },
@@ -189,11 +189,11 @@ class RoleTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                                 ->roles->read();
-        
-        $this->assertTrue(count($actual) > 0);
+
+        $this->assertGreaterThan(0, count($actual));
     }
 
     public function testReadEmptyResponse() {
@@ -203,10 +203,10 @@ class RoleTest extends HolodeckTestCase {
             {
                 "meta": {
                     "page": 0,
-                    "page_size": 1,
-                    "first_page_url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=1&Page=0",
+                    "page_size": 50,
+                    "first_page_url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=50&Page=0",
                     "previous_page_url": null,
-                    "url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=1&Page=0",
+                    "url": "https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles?PageSize=50&Page=0",
                     "next_page_url": null,
                     "key": "roles"
                 },
@@ -214,33 +214,32 @@ class RoleTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                                 ->roles->read();
-        
+
         $this->assertNotNull($actual);
     }
 
     public function testUpdateRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-                                          ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->update("friendlyName", array('permission'));
+                                          ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->update(array('permission'));
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
+
         $values = array(
-            'FriendlyName' => "friendlyName",
             'Permission' => array('permission'),
         );
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'post',
             'https://ip-messaging.twilio.com/v1/Services/ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Roles/RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
             null,
             $values
-        )));
+        ));
     }
 
     public function testUpdateResponse() {
@@ -265,10 +264,10 @@ class RoleTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->ipMessaging->v1->services("ISaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-                                                ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->update("friendlyName", array('permission'));
-        
+                                                ->roles("RLaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->update(array('permission'));
+
         $this->assertNotNull($actual);
     }
 }

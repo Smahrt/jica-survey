@@ -11,6 +11,7 @@ namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
+use Twilio\Options;
 use Twilio\Rest\Api\V2010\Account\Call\FeedbackList;
 use Twilio\Rest\Api\V2010\Account\Call\NotificationList;
 use Twilio\Rest\Api\V2010\Account\Call\RecordingList;
@@ -40,14 +41,14 @@ class CallContext extends InstanceContext {
      */
     public function __construct(Version $version, $accountSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Calls/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Calls/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -66,13 +67,13 @@ class CallContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new CallInstance(
             $this->version,
             $payload,
@@ -84,12 +85,12 @@ class CallContext extends InstanceContext {
     /**
      * Update the CallInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return CallInstance Updated CallInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'Url' => $options['url'],
             'Method' => $options['method'],
@@ -99,14 +100,14 @@ class CallContext extends InstanceContext {
             'StatusCallback' => $options['statusCallback'],
             'StatusCallbackMethod' => $options['statusCallbackMethod'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new CallInstance(
             $this->version,
             $payload,
@@ -128,7 +129,7 @@ class CallContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_recordings;
     }
 
@@ -145,7 +146,7 @@ class CallContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_notifications;
     }
 
@@ -162,7 +163,7 @@ class CallContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_feedback;
     }
 
@@ -178,7 +179,7 @@ class CallContext extends InstanceContext {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -195,7 +196,7 @@ class CallContext extends InstanceContext {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

@@ -1,11 +1,8 @@
 @extends('layouts.master')
+
 <?php use App\Http\Controllers\MainController; ?>
 
 @section('title', 'Dashboard')
-
-@section('sidebar')
-    @parent
-@endsection
 
 @section('content')
 
@@ -109,11 +106,4 @@
             </div>
         </div>
     </div>
-@endsection
-
-
-        
-
-@section('footer')
-@parent
-@endsection
+@stop

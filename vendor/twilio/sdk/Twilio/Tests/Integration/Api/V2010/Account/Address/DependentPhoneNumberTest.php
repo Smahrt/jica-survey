@@ -18,18 +18,18 @@ use Twilio\Tests\Request;
 class DependentPhoneNumberTest extends HolodeckTestCase {
     public function testReadRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->api->v2010->accounts("ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                      ->addresses("ADaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                      ->dependentPhoneNumbers->read();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
             'https://api.twilio.com/2010-04-01/Accounts/ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Addresses/ADaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/DependentPhoneNumbers.json'
-        )));
+        ));
     }
 
     public function testReadFullResponse() {
@@ -65,12 +65,12 @@ class DependentPhoneNumberTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->api->v2010->accounts("ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                            ->addresses("ADaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                            ->dependentPhoneNumbers->read();
-        
-        $this->assertTrue(count($actual) > 0);
+
+        $this->assertGreaterThan(0, count($actual));
     }
 
     public function testReadEmptyResponse() {
@@ -88,11 +88,11 @@ class DependentPhoneNumberTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->api->v2010->accounts("ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                            ->addresses("ADaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                            ->dependentPhoneNumbers->read();
-        
+
         $this->assertNotNull($actual);
     }
 }

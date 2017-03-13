@@ -35,14 +35,14 @@ class MessageContext extends InstanceContext {
      */
     public function __construct(Version $version, $accountSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Messages/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Messages/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -61,13 +61,13 @@ class MessageContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new MessageInstance(
             $this->version,
             $payload,
@@ -79,23 +79,21 @@ class MessageContext extends InstanceContext {
     /**
      * Update the MessageInstance
      * 
-     * @param array $options Optional Arguments
+     * @param string $body The body
      * @return MessageInstance Updated MessageInstance
      */
-    public function update(array $options = array()) {
-        $options = new Values($options);
-        
+    public function update($body) {
         $data = Values::of(array(
-            'Body' => $options['body'],
+            'Body' => $body,
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new MessageInstance(
             $this->version,
             $payload,
@@ -117,7 +115,7 @@ class MessageContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_media;
     }
 
@@ -134,7 +132,7 @@ class MessageContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_feedback;
     }
 
@@ -150,7 +148,7 @@ class MessageContext extends InstanceContext {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -167,7 +165,7 @@ class MessageContext extends InstanceContext {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

@@ -18,22 +18,22 @@ use Twilio\Tests\Request;
 class TokenTest extends HolodeckTestCase {
     public function testCreateRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->api->v2010->accounts("ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                      ->tokens->create();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'post',
             'https://api.twilio.com/2010-04-01/Accounts/ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/Tokens.json'
-        )));
+        ));
     }
 
     public function testCreateResponse() {
         $this->holodeck->mock(new Response(
-            200,
+            201,
             '
             {
                 "account_sid": "ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
@@ -55,10 +55,10 @@ class TokenTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->api->v2010->accounts("ACaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                                            ->tokens->create();
-        
+
         $this->assertNotNull($actual);
     }
 }

@@ -10,6 +10,8 @@
 namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -24,14 +26,14 @@ class ApplicationContext extends InstanceContext {
      */
     public function __construct(Version $version, $accountSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Applications/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Applications/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -50,13 +52,13 @@ class ApplicationContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new ApplicationInstance(
             $this->version,
             $payload,
@@ -68,12 +70,12 @@ class ApplicationContext extends InstanceContext {
     /**
      * Update the ApplicationInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return ApplicationInstance Updated ApplicationInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'FriendlyName' => $options['friendlyName'],
             'ApiVersion' => $options['apiVersion'],
@@ -83,7 +85,7 @@ class ApplicationContext extends InstanceContext {
             'VoiceFallbackMethod' => $options['voiceFallbackMethod'],
             'StatusCallback' => $options['statusCallback'],
             'StatusCallbackMethod' => $options['statusCallbackMethod'],
-            'VoiceCallerIdLookup' => $options['voiceCallerIdLookup'],
+            'VoiceCallerIdLookup' => Serialize::booleanToString($options['voiceCallerIdLookup']),
             'SmsUrl' => $options['smsUrl'],
             'SmsMethod' => $options['smsMethod'],
             'SmsFallbackUrl' => $options['smsFallbackUrl'],
@@ -91,14 +93,14 @@ class ApplicationContext extends InstanceContext {
             'SmsStatusCallback' => $options['smsStatusCallback'],
             'MessageStatusCallback' => $options['messageStatusCallback'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new ApplicationInstance(
             $this->version,
             $payload,

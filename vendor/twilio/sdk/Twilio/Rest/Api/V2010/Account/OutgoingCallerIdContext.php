@@ -10,6 +10,7 @@
 namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -24,14 +25,14 @@ class OutgoingCallerIdContext extends InstanceContext {
      */
     public function __construct(Version $version, $accountSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/OutgoingCallerIds/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/OutgoingCallerIds/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -41,13 +42,13 @@ class OutgoingCallerIdContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new OutgoingCallerIdInstance(
             $this->version,
             $payload,
@@ -59,23 +60,23 @@ class OutgoingCallerIdContext extends InstanceContext {
     /**
      * Update the OutgoingCallerIdInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return OutgoingCallerIdInstance Updated OutgoingCallerIdInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'FriendlyName' => $options['friendlyName'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new OutgoingCallerIdInstance(
             $this->version,
             $payload,

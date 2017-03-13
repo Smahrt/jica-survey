@@ -2,10 +2,6 @@
 
 @section('title', 'Surveys')
 
-@section('sidebar')
-    @parent
-@endsection
-
 @section('content')
     <?php 
     /*if(isset($sucess)){
@@ -83,8 +79,4 @@
                         <div class="col-md-1"></div>
 						
     </div>
-@endsection
-
-@section('footer')
-    @parent
-@endsection
+@stop

@@ -11,6 +11,8 @@ namespace Twilio\Rest\IpMessaging\V1\Service;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
+use Twilio\Options;
+use Twilio\Rest\IpMessaging\V1\Service\Channel\InviteList;
 use Twilio\Rest\IpMessaging\V1\Service\Channel\MemberList;
 use Twilio\Rest\IpMessaging\V1\Service\Channel\MessageList;
 use Twilio\Values;
@@ -19,12 +21,15 @@ use Twilio\Version;
 /**
  * @property \Twilio\Rest\IpMessaging\V1\Service\Channel\MemberList members
  * @property \Twilio\Rest\IpMessaging\V1\Service\Channel\MessageList messages
+ * @property \Twilio\Rest\IpMessaging\V1\Service\Channel\InviteList invites
  * @method \Twilio\Rest\IpMessaging\V1\Service\Channel\MemberContext members(string $sid)
  * @method \Twilio\Rest\IpMessaging\V1\Service\Channel\MessageContext messages(string $sid)
+ * @method \Twilio\Rest\IpMessaging\V1\Service\Channel\InviteContext invites(string $sid)
  */
 class ChannelContext extends InstanceContext {
     protected $_members = null;
     protected $_messages = null;
+    protected $_invites = null;
 
     /**
      * Initialize the ChannelContext
@@ -36,14 +41,14 @@ class ChannelContext extends InstanceContext {
      */
     public function __construct(Version $version, $serviceSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'serviceSid' => $serviceSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Services/' . $serviceSid . '/Channels/' . $sid . '';
+
+        $this->uri = '/Services/' . rawurlencode($serviceSid) . '/Channels/' . rawurlencode($sid) . '';
     }
 
     /**
@@ -53,13 +58,13 @@ class ChannelContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new ChannelInstance(
             $this->version,
             $payload,
@@ -80,26 +85,25 @@ class ChannelContext extends InstanceContext {
     /**
      * Update the ChannelInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return ChannelInstance Updated ChannelInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'FriendlyName' => $options['friendlyName'],
             'UniqueName' => $options['uniqueName'],
             'Attributes' => $options['attributes'],
-            'Type' => $options['type'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new ChannelInstance(
             $this->version,
             $payload,
@@ -121,7 +125,7 @@ class ChannelContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_members;
     }
 
@@ -138,8 +142,25 @@ class ChannelContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_messages;
+    }
+
+    /**
+     * Access the invites
+     * 
+     * @return \Twilio\Rest\IpMessaging\V1\Service\Channel\InviteList 
+     */
+    protected function getInvites() {
+        if (!$this->_invites) {
+            $this->_invites = new InviteList(
+                $this->version,
+                $this->solution['serviceSid'],
+                $this->solution['sid']
+            );
+        }
+
+        return $this->_invites;
     }
 
     /**
@@ -154,7 +175,7 @@ class ChannelContext extends InstanceContext {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -171,7 +192,7 @@ class ChannelContext extends InstanceContext {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

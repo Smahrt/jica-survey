@@ -18,17 +18,17 @@ use Twilio\Tests\Request;
 class CountryTest extends HolodeckTestCase {
     public function testReadRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->pricing->v1->phoneNumbers
                                       ->countries->read();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
             'https://pricing.twilio.com/v1/PhoneNumbers/Countries'
-        )));
+        ));
     }
 
     public function testReadFullResponse() {
@@ -55,11 +55,11 @@ class CountryTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->pricing->v1->phoneNumbers
                                             ->countries->read();
-        
-        $this->assertTrue(count($actual) > 0);
+
+        $this->assertGreaterThan(0, count($actual));
     }
 
     public function testReadEmptyResponse() {
@@ -80,26 +80,26 @@ class CountryTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->pricing->v1->phoneNumbers
                                             ->countries->read();
-        
+
         $this->assertNotNull($actual);
     }
 
     public function testFetchRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->pricing->v1->phoneNumbers
                                       ->countries("US")->fetch();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
             'https://pricing.twilio.com/v1/PhoneNumbers/Countries/US'
-        )));
+        ));
     }
 
     public function testFetchResponse() {
@@ -126,10 +126,10 @@ class CountryTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->pricing->v1->phoneNumbers
                                             ->countries("US")->fetch();
-        
+
         $this->assertNotNull($actual);
     }
 }

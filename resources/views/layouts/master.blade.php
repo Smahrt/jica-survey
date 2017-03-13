@@ -15,7 +15,10 @@
     <meta name="viewport" content="width=device-width" />
     
     @include('layouts.style')
-        
+        <!--   Core JS Files   -->
+	{!! HTML::script('assets/js/jquery-3.1.0.min.js') !!}
+	{!! HTML::script('assets/js/bootstrap.min.js') !!}
+	{!! HTML::script('assets/js/material.min.js') !!}
 </head>
     
     
@@ -42,11 +45,15 @@
                                 <li class="dropdown">
                                     <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                        <i class="material-icons">person</i>
+<<<<<<< HEAD
                                        <p class=""></p>
+=======
+                                       <p class="hidden-lg hidden-md">My Name</p>
+>>>>>>> origin/master
                                    </a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="{{ url('/dashboard') }}">Dashboard</a>
+                                            <a href="{{ url() }}">Dashboard</a>
                                         </li>
                                         <li>
                                             <a href="{{ url('/surveys') }}">Surveys</a>
@@ -76,15 +83,7 @@
 
                 </div>
                 
-            @section('footer')
-            <footer class="footer">
-                <div class="container-fluid">
-                    <p class="copyright pull-right">
-                        &copy; <script>document.write(new Date().getFullYear())</script> <a href="http://www.cedarviewng.com">Cedarview</a>
-                    </p>
-                </div>
-            </footer>
-            @stop
+            @include('layouts.footer')
                 
             </div>
         </div>

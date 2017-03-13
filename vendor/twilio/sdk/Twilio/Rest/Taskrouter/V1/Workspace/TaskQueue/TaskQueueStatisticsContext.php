@@ -10,6 +10,8 @@
 namespace Twilio\Rest\Taskrouter\V1\Workspace\TaskQueue;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -24,38 +26,37 @@ class TaskQueueStatisticsContext extends InstanceContext {
      */
     public function __construct(Version $version, $workspaceSid, $taskQueueSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'workspaceSid' => $workspaceSid,
             'taskQueueSid' => $taskQueueSid,
         );
-        
-        $this->uri = '/Workspaces/' . $workspaceSid . '/TaskQueues/' . $taskQueueSid . '/Statistics';
+
+        $this->uri = '/Workspaces/' . rawurlencode($workspaceSid) . '/TaskQueues/' . rawurlencode($taskQueueSid) . '/Statistics';
     }
 
     /**
      * Fetch a TaskQueueStatisticsInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return TaskQueueStatisticsInstance Fetched TaskQueueStatisticsInstance
      */
-    public function fetch(array $options = array()) {
+    public function fetch($options = array()) {
         $options = new Values($options);
-        
+
         $params = Values::of(array(
-            'EndDate' => $options['endDate'],
-            'FriendlyName' => $options['friendlyName'],
+            'EndDate' => Serialize::iso8601DateTime($options['endDate']),
             'Minutes' => $options['minutes'],
-            'StartDate' => $options['startDate'],
+            'StartDate' => Serialize::iso8601DateTime($options['startDate']),
         ));
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new TaskQueueStatisticsInstance(
             $this->version,
             $payload,

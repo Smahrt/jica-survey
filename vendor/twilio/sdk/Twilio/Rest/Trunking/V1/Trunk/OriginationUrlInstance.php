@@ -12,17 +12,19 @@ namespace Twilio\Rest\Trunking\V1\Trunk;
 use Twilio\Deserialize;
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceResource;
+use Twilio\Options;
+use Twilio\Values;
 use Twilio\Version;
 
 /**
  * @property string accountSid
  * @property string sid
  * @property string trunkSid
- * @property string weight
- * @property string enabled
+ * @property integer weight
+ * @property boolean enabled
  * @property string sipUrl
  * @property string friendlyName
- * @property string priority
+ * @property integer priority
  * @property \DateTime dateCreated
  * @property \DateTime dateUpdated
  * @property string url
@@ -39,22 +41,22 @@ class OriginationUrlInstance extends InstanceResource {
      */
     public function __construct(Version $version, array $payload, $trunkSid, $sid = null) {
         parent::__construct($version);
-        
+
         // Marshaled Properties
         $this->properties = array(
-            'accountSid' => $payload['account_sid'],
-            'sid' => $payload['sid'],
-            'trunkSid' => $payload['trunk_sid'],
-            'weight' => $payload['weight'],
-            'enabled' => $payload['enabled'],
-            'sipUrl' => $payload['sip_url'],
-            'friendlyName' => $payload['friendly_name'],
-            'priority' => $payload['priority'],
-            'dateCreated' => Deserialize::iso8601DateTime($payload['date_created']),
-            'dateUpdated' => Deserialize::iso8601DateTime($payload['date_updated']),
-            'url' => $payload['url'],
+            'accountSid' => Values::array_get($payload, 'account_sid'),
+            'sid' => Values::array_get($payload, 'sid'),
+            'trunkSid' => Values::array_get($payload, 'trunk_sid'),
+            'weight' => Values::array_get($payload, 'weight'),
+            'enabled' => Values::array_get($payload, 'enabled'),
+            'sipUrl' => Values::array_get($payload, 'sip_url'),
+            'friendlyName' => Values::array_get($payload, 'friendly_name'),
+            'priority' => Values::array_get($payload, 'priority'),
+            'dateCreated' => Deserialize::dateTime(Values::array_get($payload, 'date_created')),
+            'dateUpdated' => Deserialize::dateTime(Values::array_get($payload, 'date_updated')),
+            'url' => Values::array_get($payload, 'url'),
         );
-        
+
         $this->solution = array(
             'trunkSid' => $trunkSid,
             'sid' => $sid ?: $this->properties['sid'],
@@ -77,7 +79,7 @@ class OriginationUrlInstance extends InstanceResource {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->context;
     }
 
@@ -102,10 +104,10 @@ class OriginationUrlInstance extends InstanceResource {
     /**
      * Update the OriginationUrlInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return OriginationUrlInstance Updated OriginationUrlInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         return $this->proxy()->update(
             $options
         );
@@ -122,12 +124,12 @@ class OriginationUrlInstance extends InstanceResource {
         if (array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-        
+
         if (property_exists($this, '_' . $name)) {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown property: ' . $name);
     }
 

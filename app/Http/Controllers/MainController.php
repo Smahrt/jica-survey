@@ -55,27 +55,23 @@ class MainController extends Controller
    
     }
     
-    public function showLogin(){
-        if (Auth::check())
-            {
-                return Redirect('dashboard');
-                
-            }
-    }
-
-    public function verifyUser(){
-        //checking if there is a session already
-        if(session()->has('first_name')){
-            return redirect()->route('dashboard');
+    public function showDashboard(){
+        if($_COOKIE['first_name']="value"){
+            return view('pages.dashboard');
 
         }else{
-            return redirect()->route('login');
+            echo "Session cannot find first_name";
+            // $_COOKIE['first_name'];
+            //return view('pages.login');
         }
     }
     
     public function doLogin(Request $request){ 
-        
-        //create vaidation rules
+        if(session()->has('first_name')){
+            return view('pages.dashboard');
+
+        }else{
+            //create vaidation rules
         $rules = array(
             'email' => 'required|email',
             'password' =>'required|alphaNum|min:4'
@@ -98,11 +94,12 @@ class MainController extends Controller
             $query_em = DB::connection('mysql')->select("SELECT * FROM users WHERE email ='$email'");
             $email_query[]="";
             
+
              foreach($query_em as $queryDetails){
                     $userName = $queryDetails->first_name;
                     $id = $queryDetails->id;
                 }
-            
+
             $length = count($query_em);
             if($length == 0){
                 
@@ -117,6 +114,7 @@ class MainController extends Controller
                 }
                 
                 if($userPass == $password){
+
                     //--------------------------
                     $mytime = Carbon\Carbon::now();
                     $time = $mytime->toDateTimeString();
@@ -125,18 +123,23 @@ class MainController extends Controller
                     //------------------------------
                     
                     //----------------------------
-                        $request->session()->put('first_name','$userName');
+                        $request->session()->put('first_name','name');
+                        session(['first_name' => 'value']);
+                        setcookie("first_name","value",time()+5);
                     //-----------------------------
                     //return view('pages.dashboard',['userName'=>$userName]);
-                    return redirect()->route('dashboard', ['userName'=>$userName]);
+                    return redirect()->route('dashboard');
                 }
+                
                 else{
-                  $error_message = "Email/Password Invalid";
+                  $error_message = "Username/ Invalid".$userPass;
+
                     return view('pages.login',['error_message' => $error_message]);
                         
                 }
                 
             }
+        }
         }
         
     }
@@ -187,15 +190,7 @@ class MainController extends Controller
         
     }
 
-    /*public function authenticate() {
-        if (Auth::attempt(['email' => Request::get('email'), 'password' => Request::get('password')])){
-            return redirect()->intended('dashboard');
-        }else{
-            return view('login');
-        }
-        
-    }*/
-    
+   
     
     
 }

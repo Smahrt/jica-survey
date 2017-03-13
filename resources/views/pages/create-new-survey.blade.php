@@ -2,10 +2,6 @@
 
 @section('title', 'Create New Survey')
 
-@section('sidebar')
-    @parent
-@endsection
-
 @section('content')
 
     <?php 
@@ -25,65 +21,159 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
+            <!-- Toggle Button -->
+            <div id="bd" class="align-center">
+                <table>
+                    <tr>
+                        <td><span id="tts-label">Text-to-Speech (TTS)</span></td>
+                        <td>
+                            <div class="material-switch">
+                                <input id="toggle-survey" type="checkbox" name="survey_toggle"/>
+                                <label for="toggle-survey" class="label-default"></label>
+                            </div>
+                        </td>
+                        <td>
+                            <span id="vr-label" class="pull-right">Voice Recording</span>
+                        </td>
+                    </tr>
+                
+                </table>
+                
+            </div>
+            
             <div class="card">
-                <div class="card-header" data-background-color="orange">
-                    <h4 class="title">Create New Survey</h4>
+                <div id="surveyHead" class="card-header" data-background-color="dark">
+                    <h4 class="title">Create New Survey <span class="sub-title"> - Text-to-Speech (TTS)</span></h4>
                     <p class="category">Create a new survey form by adding questions and forms of answers</p>
                 </div>
                 <div class="card-content">
-                    <form>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group label-floating">
-                                    <label class="control-label">Survey Title</label>
-                                    <input type="text" class="form-control" name="surveyTitle" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label class="control-label">Introduction</label>
-                                    <textarea class="form-control" name="surveyIntro" placeholder="Write a brief introduction for this survey" ></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="thequestion">
-                            <div class="title">
-                                <h4>Survey Questions</h4>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">1. Question</label>
-                                        <textarea class="form-control" name="question" placeholder="Enter your question" ></textarea>
+                    <div id="#card">
+                        <!-- FRONT:: TTS pane -->
+                        <div class="front">
+                            <form action="{{ url('/tts-survey') }}" method="post">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Survey Title</label>
+                                            <input type="text" class="form-control" name="surveyTitle" >
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label class="control-label">Response Type</label>
-                                        <select type="text" class="form-control" name="question">
-                                            <option disabled selected>Select Response Type</option>
-                                            <option value="free-response">Free Response</option>
-                                            <option value="yes-no">Yes/No</option>
-                                            <option value="numeric">Numeric</option>
-                                        </select>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Introduction</label>
+                                            <textarea class="form-control" name="surveyIntro" placeholder="Write a brief introduction for this survey" ></textarea>
+                                        </div>
                                     </div>
-                                    <button type="button" class="btn btn-success pull-right add-question">
-                                        Add Question
-                                    </button>
                                 </div>
-                            </div>
+                                <div id="thequestion">
+                                    <div class="title">
+                                        <h4>Survey Questions</h4>
+                                    </div>
+                                    <div id="question-1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">1. Question</label>
+                                                    <textarea class="form-control" name="question" placeholder="Enter your question" ></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Response Type</label>
+                                                    <select type="text" class="form-control" name="question">
+                                                        <option disabled selected>Select Response Type</option>
+                                                        <option value="free-response">Free Response</option>
+                                                        <option value="yes-no">Yes/No</option>
+                                                        <option value="numeric">Numeric</option>
+                                                    </select>
+                                                </div>
+                                                <button type="button" class="btn btn-success pull-right add-question">
+                                                    Add Question
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-warning">Save Survey</button>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-warning">Create Survey</button>
-                            </div>
+                        
+                        <!-- BACK:: Voice Recording pane -->
+                        <div class="back hidden">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group label-floating">
+                                            <label class="control-label">Survey Title</label>
+                                            <input type="text" class="form-control" name="surveyTitle" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Introduction</label>
+                                            <div class="recordVoice">
+                                                <button type="button" class="btn btn-simple btn-success start_record_btn" onclick="startRecording();"><i class="material-icons">play_arrow</i> Start Recording</button>
+                                                <button type="button" class="btn btn-simple btn-danger stop_record_btn" onclick="stopRecording();" disabled><i class="material-icons">stop</i> Stop Recording</button>
+                                                <span class="recordLog"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="therecord">
+                                    <div class="title">
+                                        <h4>Survey Questions</h4>
+                                    </div>
+                                    <div id="record-1">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">1. Question</label>
+                                                    <div class="recordVoice">
+                                                        <button type="button" class="btn btn-simple btn-success start_record_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
+                                                        <button type="button" class="btn btn-simple btn-danger stop_record_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
+                                                        <span class="recordLog"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label">Response Type</label>
+                                                    <select type="text" class="form-control" name="question">
+                                                        <option disabled selected>Select Response Type</option>
+                                                        <option value="free-response">Free Response</option>
+                                                        <option value="yes-no">Yes/No</option>
+                                                        <option value="numeric">Numeric</option>
+                                                    </select>
+                                                </div>
+                                                <button type="button" class="btn btn-success pull-right add-record">
+                                                    Add Question
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-warning">Save Survey</button>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </form>
                         </div>
-                        <div class="clearfix"></div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -91,6 +181,210 @@
     </div>
 @endsection
 
-        
+@section('scripts')
+<script type="text/javascript">
+    $(document).ready(function(){
+            var back = $('.back');
+            var front = $('.front');
+        $('.material-switch :checkbox').click(function(){
+            
+            if(back.hasClass('hidden')){
+                /** If Voice Recording is selected **/
+                
+                back.removeClass('hidden');
+                
+                $('.sub-title').html(' - Voice Recording');
+                $('#surveyHead').attr('data-background-color', 'orange');
+                
+                front.addClass('hidden');
+                
+                
+                //Check for recording capabilities on browser
+                function init() {
+                    try {
+                      // webkit shim
+                      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                        //added support for firefox
+                      navigator.getUserMedia = ( navigator.getUserMedia ||
+                                       navigator.webkitGetUserMedia ||
+                                       navigator.mozGetUserMedia ||
+                                       navigator.msGetUserMedia);
 
-@section('footer')
+                      window.URL = window.URL || window.webkitURL;
+
+                      audio_context = new AudioContext;
+                      __log('Audio context set up.');
+                      __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+                    } catch (e) {
+                      alert('No web audio support in this browser!');
+                    }
+
+                    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+                      __log('No live audio input: ' + e);
+                    });
+                  };
+                init();
+            }else{
+                /** If TTS is selected **/
+                
+                back.addClass('hidden');
+                
+                $('.sub-title').html(' - Text-to-Speech (TTS)');
+                $('#surveyHead').attr('data-background-color', 'dark');
+                
+                front.removeClass('hidden');
+                
+            }
+        });
+        /** Survey Questions Add **/
+        var id = 2;
+        var i = 2;
+        
+        $('#thequestion').on("click", '.add-question', function(){
+                    var nextquestion = `<div id="question-`+ id +`">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group label-floating">
+                            <label class="control-label">`+ id +`. Question</label>
+                            <textarea class="form-control" name="question-`+ id +`" ></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Response Type</label>
+                            <select type="text" class="form-control" name="questiontype-`+ id +`">
+                                <option disabled selected>Select Response Type</option>
+                                <option value="free-response">Free Response</option>
+                                <option value="yes-no">Yes/No</option>
+                                <option value="numeric">Numeric</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-success pull-right add-question">
+                            Add Question
+                        </button>
+                    </div>
+                </div>
+            </div>`;
+            $('#thequestion').append(nextquestion);
+
+            $(this).removeClass("add-question").hide();
+            id++;
+        });
+        
+        $('.back #therecord').on("click", '.add-record', function(){
+                    var next = `<div id="record-`+ id +`">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group label-floating">
+                            <label class="control-label">`+ i +`. Question</label>
+                                    <div class="recordVoice">
+                                        <button type="button" class="btn btn-simple btn-success start_record_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
+                                        <button type="button" class="btn btn-simple btn-danger stop_record_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
+                                        <span class="recordLog"></span>
+                                    </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label">Response Type</label>
+                            <select type="text" class="form-control" name="questiontype-`+i+`">
+                                <option disabled selected>Select Response Type</option>
+                                <option value="free-response">Free Response</option>
+                                <option value="yes-no">Yes/No</option>
+                                <option value="numeric">Numeric</option>
+                            </select>
+                        </div>
+                        <button type="button" class="btn btn-success pull-right add-record">
+                            Add Question
+                        </button>
+                    </div>
+                </div>`;
+            $('#therecord').append(next);
+
+            $(this).removeClass("add-record").hide();
+            i++;
+        });
+
+    });
+
+</script>
+<script>
+    function __log(e, data) {
+          var logInfo;
+    logInfo += "\n" + e + " " + (data || '');
+          console.log(logInfo);
+  }
+
+  var audio_context;
+  var recorder;
+
+  function startUserMedia(stream) {
+    var input = audio_context.createMediaStreamSource(stream);
+    __log('Media stream created.');
+
+    // Uncomment if you want the audio to feedback directly
+    //input.connect(audio_context.destination);
+    //__log('Input connected to audio context destination.');
+    
+    recorder = new Recorder(input);
+    __log('Recorder initialised.');
+  }
+
+  function startRecording(btn) {
+    recorder && recorder.record();
+    $('.start_record_btn').prop('disabled', true);
+    $('.stop_record_btn').prop('disabled', false);
+    $('.recordLog').text("Recording...");
+      
+  }
+
+  function stopRecording() {
+    recorder && recorder.stop();
+    $('.start_record_btn').prop('disabled', false);
+    $('.stop_record_btn').prop('disabled', true);
+    $('.recordLog').text('Stopped Recording...');
+    
+    // create WAV download link using audio data blob
+    createDownloadLink();
+    
+    recorder.clear();
+  }
+
+  function createDownloadLink() {
+    recorder && recorder.exportWAV(function(blob) {
+      var url = URL.createObjectURL(blob);
+      var span = document.createElement('span');
+      var audio = document.createElement('audio');
+      var hf = document.createElement('a');
+      
+      audio.controls = true;
+      audio.src = url;
+      hf.href = url;
+      hf.download = new Date().toISOString() + '.wav';
+      hf.innerHTML = hf.download;
+      span.appendChild(audio);
+      span.appendChild(hf);
+        var delBtn = '<button class="btn btn-simple btn-xs btn-danger pull-right" type="button"><i class="material-icons">close</i></button>';
+        var dwnldBtn = '<a class="btn btn-simple btn-xs btn-danger pull-right down" type="button"><i class="material-icons">paste</i></a>';
+        $('.down').attr("href", hf.download);
+        $('.recordVoice').after(span);
+        $('.recordVoice').after(delBtn);
+        $('.recordVoice').after(dwnldBtn);
+    });
+  }
+    /*
+    $('.re').on('click', this, function(){
+        startRecording();
+    });
+    
+    $('.stop-record-btn').on('click', this, function(){
+        stopRecording();
+    });
+    */
+</script>
+{!! HTML::script('assets/js/libs/RecorderJS/recorder.js') !!}
+@endsection

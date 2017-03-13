@@ -1,17 +1,16 @@
 <!-- app/views/login.blade.php -->
-@section('title', 'Login')
 
 
 <!doctype html>
 <html>
 <head>
-<title>JICA Data Collection App - @yield('title')</title>
+<title>Look at me Login</title>
 </head>
 <body>
 
 
 <h1>Login</h1>
-{!! Form::open(array('url' => 'login')) !!}
+{!! Form::open(array('url' => 'signin')) !!}
 
 <!-- if there are login errors, show them here -->
 <div id ="error" class="">

@@ -10,6 +10,8 @@
 namespace Twilio\Rest\Taskrouter\V1\Workspace\Task;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -25,15 +27,15 @@ class ReservationContext extends InstanceContext {
      */
     public function __construct(Version $version, $workspaceSid, $taskSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'workspaceSid' => $workspaceSid,
             'taskSid' => $taskSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Workspaces/' . $workspaceSid . '/Tasks/' . $taskSid . '/Reservations/' . $sid . '';
+
+        $this->uri = '/Workspaces/' . rawurlencode($workspaceSid) . '/Tasks/' . rawurlencode($taskSid) . '/Reservations/' . rawurlencode($sid) . '';
     }
 
     /**
@@ -43,13 +45,13 @@ class ReservationContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new ReservationInstance(
             $this->version,
             $payload,
@@ -62,12 +64,12 @@ class ReservationContext extends InstanceContext {
     /**
      * Update the ReservationInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return ReservationInstance Updated ReservationInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'ReservationStatus' => $options['reservationStatus'],
             'WorkerActivitySid' => $options['workerActivitySid'],
@@ -84,19 +86,19 @@ class ReservationContext extends InstanceContext {
             'CallTo' => $options['callTo'],
             'CallUrl' => $options['callUrl'],
             'CallStatusCallbackUrl' => $options['callStatusCallbackUrl'],
-            'CallAccept' => $options['callAccept'],
+            'CallAccept' => Serialize::booleanToString($options['callAccept']),
             'RedirectCallSid' => $options['redirectCallSid'],
-            'RedirectAccept' => $options['redirectAccept'],
+            'RedirectAccept' => Serialize::booleanToString($options['redirectAccept']),
             'RedirectUrl' => $options['redirectUrl'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new ReservationInstance(
             $this->version,
             $payload,
