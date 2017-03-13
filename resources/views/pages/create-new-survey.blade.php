@@ -118,14 +118,15 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <div class="row" id="record-0">
                                     <div class="col-md-12">
                                         <div class="form-group">
                                             <label class="control-label">Introduction</label>
-                                            <div class="recordVoice">
-                                                <button type="button" class="btn btn-simple btn-success start_record_btn" onclick="startRecording();"><i class="material-icons">play_arrow</i> Start Recording</button>
-                                                <button type="button" class="btn btn-simple btn-danger stop_record_btn" onclick="stopRecording();" disabled><i class="material-icons">stop</i> Stop Recording</button>
-                                                <span class="recordLog"></span>
+                                            <div id="record-ctrl-0">
+                                                <button id="start-btn-0" type="button" class="btn btn-simple btn-success start_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
+                                                <button id="stop-btn-0" type="button" class="btn btn-simple btn-danger stop_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
+                                                <span id="recordLog-0"></span>
+                                                <div class="output"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -139,10 +140,11 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">1. Question</label>
-                                                    <div class="recordVoice">
-                                                        <button type="button" class="btn btn-simple btn-success start_record_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
-                                                        <button type="button" class="btn btn-simple btn-danger stop_record_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
-                                                        <span class="recordLog"></span>
+                                                    <div id="record-ctrl-1">
+                                                        <button type="button" id="start-btn-1" class="btn btn-simple btn-success start_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
+                                                        <button type="button" id="stop-btn-1" class="btn btn-simple btn-danger stop_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
+                                                        <span id="recordLog-1"></span>
+                                                        <div class="output"></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -184,8 +186,10 @@
 @section('scripts')
 <script type="text/javascript">
     $(document).ready(function(){
-            var back = $('.back');
-            var front = $('.front');
+        /** Switch Forms on Button Toggle **/
+        var back = $('.back');
+        var front = $('.front');
+        
         $('.material-switch :checkbox').click(function(){
             
             if(back.hasClass('hidden')){
@@ -198,31 +202,7 @@
                 
                 front.addClass('hidden');
                 
-                
                 //Check for recording capabilities on browser
-                function init() {
-                    try {
-                      // webkit shim
-                      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-                        //added support for firefox
-                      navigator.getUserMedia = ( navigator.getUserMedia ||
-                                       navigator.webkitGetUserMedia ||
-                                       navigator.mozGetUserMedia ||
-                                       navigator.msGetUserMedia);
-
-                      window.URL = window.URL || window.webkitURL;
-
-                      audio_context = new AudioContext;
-                      __log('Audio context set up.');
-                      __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-                    } catch (e) {
-                      alert('No web audio support in this browser!');
-                    }
-
-                    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
-                      __log('No live audio input: ' + e);
-                    });
-                  };
                 init();
             }else{
                 /** If TTS is selected **/
@@ -236,11 +216,12 @@
                 
             }
         });
+        
         /** Survey Questions Add **/
         var id = 2;
         var i = 2;
         
-        $('#thequestion').on("click", '.add-question', function(){
+        $('.front #thequestion').on("click", '.add-question', function(){
                     var nextquestion = `<div id="question-`+ id +`">
                 <div class="row">
                     <div class="col-md-12">
@@ -274,15 +255,16 @@
         });
         
         $('.back #therecord').on("click", '.add-record', function(){
-                    var next = `<div id="record-`+ id +`">
+                    var next = `<div id="record-`+ i +`">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group label-floating">
                             <label class="control-label">`+ i +`. Question</label>
-                                    <div class="recordVoice">
-                                        <button type="button" class="btn btn-simple btn-success start_record_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
-                                        <button type="button" class="btn btn-simple btn-danger stop_record_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
-                                        <span class="recordLog"></span>
+                                    <div id="record-ctrl-`+ i +`">
+                                        <button type="button" id="start-btn-`+i+`" class="btn btn-simple btn-success start_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
+                                        <button type="button" id="stop-btn-`+i+`" class="btn btn-simple btn-danger stop_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
+                                        <span id="recordLog-`+ i +`"></span>
+                                        <div class="output"></div>
                                     </div>
                         </div>
                     </div>
@@ -308,83 +290,135 @@
             $(this).removeClass("add-record").hide();
             i++;
         });
-
-    });
-
-</script>
-<script>
+        
+        /** Create New Survey::Functions(); **/
+        
     function __log(e, data) {
-          var logInfo;
-    logInfo += "\n" + e + " " + (data || '');
-          console.log(logInfo);
-  }
-
-  var audio_context;
-  var recorder;
-
-  function startUserMedia(stream) {
-    var input = audio_context.createMediaStreamSource(stream);
-    __log('Media stream created.');
-
-    // Uncomment if you want the audio to feedback directly
-    //input.connect(audio_context.destination);
-    //__log('Input connected to audio context destination.');
+        var logInfo;
+        logInfo += "\n" + e + " " + (data || '');
+        console.log(logInfo);
+    }
     
-    recorder = new Recorder(input);
-    __log('Recorder initialised.');
-  }
-
-  function startRecording(btn) {
-    recorder && recorder.record();
-    $('.start_record_btn').prop('disabled', true);
-    $('.stop_record_btn').prop('disabled', false);
-    $('.recordLog').text("Recording...");
-      
-  }
-
-  function stopRecording() {
-    recorder && recorder.stop();
-    $('.start_record_btn').prop('disabled', false);
-    $('.stop_record_btn').prop('disabled', true);
-    $('.recordLog').text('Stopped Recording...');
+    var audio_context;
+    var recorder;
     
-    // create WAV download link using audio data blob
-    createDownloadLink();
-    
-    recorder.clear();
-  }
+    function init() {
+                    try {
+                      // webkit shim
+                      window.AudioContext = window.AudioContext || window.webkitAudioContext;
+                        //added support for firefox
+                      navigator.getUserMedia = ( navigator.getUserMedia ||
+                                       navigator.webkitGetUserMedia ||
+                                       navigator.mozGetUserMedia ||
+                                       navigator.msGetUserMedia);
 
-  function createDownloadLink() {
-    recorder && recorder.exportWAV(function(blob) {
-      var url = URL.createObjectURL(blob);
-      var span = document.createElement('span');
-      var audio = document.createElement('audio');
-      var hf = document.createElement('a');
-      
-      audio.controls = true;
-      audio.src = url;
-      hf.href = url;
-      hf.download = new Date().toISOString() + '.wav';
-      hf.innerHTML = hf.download;
-      span.appendChild(audio);
-      span.appendChild(hf);
-        var delBtn = '<button class="btn btn-simple btn-xs btn-danger pull-right" type="button"><i class="material-icons">close</i></button>';
-        var dwnldBtn = '<a class="btn btn-simple btn-xs btn-danger pull-right down" type="button"><i class="material-icons">paste</i></a>';
-        $('.down').attr("href", hf.download);
-        $('.recordVoice').after(span);
-        $('.recordVoice').after(delBtn);
-        $('.recordVoice').after(dwnldBtn);
-    });
-  }
-    /*
-    $('.re').on('click', this, function(){
-        startRecording();
-    });
-    
-    $('.stop-record-btn').on('click', this, function(){
-        stopRecording();
-    });
-    */
+                      window.URL = window.URL || window.webkitURL;
+
+                      audio_context = new AudioContext;
+                      __log('Audio context set up.');
+                      __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+                    } catch (e) {
+                      alert('No web audio support in this browser!');
+                    }
+
+                    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+                      __log('No live audio input: ' + e);
+                    });
+    }
+        
+    function startUserMedia(stream) {
+        var input = audio_context.createMediaStreamSource(stream);
+        __log('Media stream created.');
+
+        // Uncomment if you want the audio to feedback directly
+        //input.connect(audio_context.destination);
+        //__log('Input connected to audio context destination.');
+
+        recorder = new Recorder(input);
+        __log('Recorder initialised.');
+    }
+        
+    function startRecording(btn, id) {
+        var logid = "#recordLog-"+id;
+
+        recorder && recorder.record();
+
+        btn.disabled = true;
+        btn.nextElementSibling.disabled = false;
+        $(logid).text('Recording...');
+
+        recorder.clear();
+    }
+
+    function stopRecording(btn, id) {
+        var logid = "#recordLog-" + id;
+
+        recorder && recorder.stop();
+
+        btn.disabled = true;
+        btn.previousElementSibling.disabled = false;
+        $(logid).text('Stopped Recording...');
+
+        // create WAV download link using audio data blob
+        createDownloadLink(id);
+
+        recorder.clear();
+    }
+
+    function createDownloadLink(id) {
+        var logctrl = "#record-ctrl-"+id;
+            recorder && recorder.exportWAV(function(blob) {
+
+                var url = URL.createObjectURL(blob);
+                var span = document.createElement('span');
+                var audio = document.createElement('audio');
+                var hf = document.createElement('a');
+                var delBtn = '<button id="del-'+id+'" class="btn btn-simple btn-xs btn-danger pull-right del" type="button"><i class="material-icons">close</i></button>';
+
+                audio.controls = true;
+                audio.src = url;
+                hf.href = url;
+                hf.download = new Date().toISOString() + '.wav';
+                //hf.innerHTML = hf.download;
+                span.appendChild(audio);
+                span.appendChild(hf);
+                
+                $(logctrl).after(span);
+                $(logctrl).after(delBtn);
+            });
+    } 
+        
+        /** Add Click functions to buttons **/
+        
+        $('body').on('click', '.start_btn', function(){
+            var btn_id = $('.start_btn').attr('id'); //start-btn-(num) - 10
+            var num = btn_id.slice(10).trim();
+            
+            startRecording(this, num);
+            
+            $('#'+btn_id).removeClass('start_btn');
+            
+        });
+        $('body').on('click', '.stop_btn', function(){
+            var btn_id = $('.stop_btn').attr('id'); //stop-btn-(num) - 9
+            var num = btn_id.slice(9).trim();
+            var nextnum = parseInt(num)+1;
+            
+            stopRecording(this, num);
+            
+            $('#'+btn_id).removeClass('stop_btn');
+            
+        });
+        $('body').on('click', '.del', function(){
+            var del_id = $('.del').attr('id'); //del-(num) - 4
+            var num = del_id.slice(4).trim();
+            var record_id = "#record-ctrl-"+num;
+            
+            $(record_id + " > .output").html("");
+            
+        });
+        
+});
 </script>
 {!! HTML::script('assets/js/libs/RecorderJS/recorder.js') !!}
 @endsection

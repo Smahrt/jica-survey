@@ -25,5 +25,6 @@ $(document).ready(function(){
         $('#main-nav li:nth-child(1)').addClass('active');
     }
     
+    /** Create New Survey **/
     
 });

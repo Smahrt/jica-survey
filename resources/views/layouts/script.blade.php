@@ -29,7 +29,6 @@
 
 @yield('scripts')
 
-<!--TRIAL-->
 
 
 
