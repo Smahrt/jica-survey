@@ -117,3 +117,7 @@ Route::get('/create-new-survey', function () {
 // route to process the form
 Route::post('login', array('uses' => 'MainController@doLogin'));
 
+Route::post('/tts-survey', function(Request $request){
+    echo $request->surveyTitle;
+});
+

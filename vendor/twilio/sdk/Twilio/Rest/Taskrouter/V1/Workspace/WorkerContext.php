@@ -11,6 +11,7 @@ namespace Twilio\Rest\Taskrouter\V1\Workspace;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
+use Twilio\Options;
 use Twilio\Rest\Taskrouter\V1\Workspace\Worker\ReservationList;
 use Twilio\Rest\Taskrouter\V1\Workspace\Worker\WorkerChannelList;
 use Twilio\Rest\Taskrouter\V1\Workspace\Worker\WorkerStatisticsList;
@@ -40,14 +41,14 @@ class WorkerContext extends InstanceContext {
      */
     public function __construct(Version $version, $workspaceSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'workspaceSid' => $workspaceSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Workspaces/' . $workspaceSid . '/Workers/' . $sid . '';
+
+        $this->uri = '/Workspaces/' . rawurlencode($workspaceSid) . '/Workers/' . rawurlencode($sid) . '';
     }
 
     /**
@@ -57,13 +58,13 @@ class WorkerContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new WorkerInstance(
             $this->version,
             $payload,
@@ -75,25 +76,25 @@ class WorkerContext extends InstanceContext {
     /**
      * Update the WorkerInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return WorkerInstance Updated WorkerInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'ActivitySid' => $options['activitySid'],
             'Attributes' => $options['attributes'],
             'FriendlyName' => $options['friendlyName'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new WorkerInstance(
             $this->version,
             $payload,
@@ -124,7 +125,7 @@ class WorkerContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_statistics;
     }
 
@@ -141,7 +142,7 @@ class WorkerContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_reservations;
     }
 
@@ -158,7 +159,7 @@ class WorkerContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_workerChannels;
     }
 
@@ -174,7 +175,7 @@ class WorkerContext extends InstanceContext {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -191,7 +192,7 @@ class WorkerContext extends InstanceContext {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

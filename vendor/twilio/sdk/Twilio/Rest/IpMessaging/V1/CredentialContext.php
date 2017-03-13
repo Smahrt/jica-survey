@@ -10,6 +10,8 @@
 namespace Twilio\Rest\IpMessaging\V1;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -23,13 +25,13 @@ class CredentialContext extends InstanceContext {
      */
     public function __construct(Version $version, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'sid' => $sid,
         );
-        
-        $this->uri = '/Credentials/' . $sid . '';
+
+        $this->uri = '/Credentials/' . rawurlencode($sid) . '';
     }
 
     /**
@@ -39,13 +41,13 @@ class CredentialContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new CredentialInstance(
             $this->version,
             $payload,
@@ -56,27 +58,28 @@ class CredentialContext extends InstanceContext {
     /**
      * Update the CredentialInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return CredentialInstance Updated CredentialInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'FriendlyName' => $options['friendlyName'],
             'Certificate' => $options['certificate'],
             'PrivateKey' => $options['privateKey'],
-            'Sandbox' => $options['sandbox'],
+            'Sandbox' => Serialize::booleanToString($options['sandbox']),
             'ApiKey' => $options['apiKey'],
+            'Secret' => $options['secret'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new CredentialInstance(
             $this->version,
             $payload,

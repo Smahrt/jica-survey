@@ -11,7 +11,9 @@ namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\ListResource;
+use Twilio\Options;
 use Twilio\Rest\Api\V2010\Account\Call\FeedbackSummaryList;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -32,13 +34,13 @@ class CallList extends ListResource {
      */
     public function __construct(Version $version, $accountSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Calls.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Calls.json';
     }
 
     /**
@@ -46,12 +48,12 @@ class CallList extends ListResource {
      * 
      * @param string $to Phone number, SIP address or client identifier to call
      * @param string $from Twilio number from which to originate the call
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return CallInstance Newly created CallInstance
      */
-    public function create($to, $from, array $options = array()) {
+    public function create($to, $from, $options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'To' => $to,
             'From' => $from,
@@ -66,21 +68,21 @@ class CallList extends ListResource {
             'SendDigits' => $options['sendDigits'],
             'IfMachine' => $options['ifMachine'],
             'Timeout' => $options['timeout'],
-            'Record' => $options['record'],
+            'Record' => Serialize::booleanToString($options['record']),
             'RecordingChannels' => $options['recordingChannels'],
             'RecordingStatusCallback' => $options['recordingStatusCallback'],
             'RecordingStatusCallbackMethod' => $options['recordingStatusCallbackMethod'],
             'SipAuthUsername' => $options['sipAuthUsername'],
             'SipAuthPassword' => $options['sipAuthPassword'],
         ));
-        
+
         $payload = $this->version->create(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new CallInstance(
             $this->version,
             $payload,
@@ -96,7 +98,7 @@ class CallList extends ListResource {
      * The results are returned as a generator, so this operation is memory
      * efficient.
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @param int $limit Upper limit for the number of records to return. stream()
      *                   guarantees to never return more than limit.  Default is no
      *                   limit
@@ -107,11 +109,11 @@ class CallList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return \Twilio\Stream stream of results
      */
-    public function stream(array $options = array(), $limit = null, $pageSize = null) {
+    public function stream($options = array(), $limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($options, $limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -120,7 +122,7 @@ class CallList extends ListResource {
      * Unlike stream(), this operation is eager and will load `limit` records into
      * memory before returning.
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @param int $limit Upper limit for the number of records to return. read()
      *                   guarantees to never return more than limit.  Default is no
      *                   limit
@@ -131,7 +133,7 @@ class CallList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return CallInstance[] Array of results
      */
-    public function read(array $options = array(), $limit = null, $pageSize = Values::NONE) {
+    public function read($options = array(), $limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($options, $limit, $pageSize), false);
     }
 
@@ -139,36 +141,36 @@ class CallList extends ListResource {
      * Retrieve a single page of CallInstance records from the API.
      * Request is executed immediately
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @param mixed $pageSize Number of records to return, defaults to 50
      * @param string $pageToken PageToken provided by the API
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return \Twilio\Page Page of CallInstance
      */
-    public function page(array $options = array(), $pageSize = Values::NONE, $pageToken = Values::NONE, $pageNumber = Values::NONE) {
+    public function page($options = array(), $pageSize = Values::NONE, $pageToken = Values::NONE, $pageNumber = Values::NONE) {
         $options = new Values($options);
         $params = Values::of(array(
             'To' => $options['to'],
             'From' => $options['from'],
             'ParentCallSid' => $options['parentCallSid'],
             'Status' => $options['status'],
-            'StartTime<' => $options['starttimeBefore'],
-            'StartTime' => $options['startTime'],
-            'StartTime>' => $options['starttimeAfter'],
-            'EndTime<' => $options['endtimeBefore'],
-            'EndTime' => $options['endTime'],
-            'EndTime>' => $options['endtimeAfter'],
+            'StartTime<' => Serialize::iso8601DateTime($options['startTimeBefore']),
+            'StartTime' => Serialize::iso8601DateTime($options['startTime']),
+            'StartTime>' => Serialize::iso8601DateTime($options['startTimeAfter']),
+            'EndTime<' => Serialize::iso8601DateTime($options['endTimeBefore']),
+            'EndTime' => Serialize::iso8601DateTime($options['endTime']),
+            'EndTime>' => Serialize::iso8601DateTime($options['endTimeAfter']),
             'PageToken' => $pageToken,
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new CallPage($this->version, $response, $this->solution);
     }
 
@@ -182,7 +184,7 @@ class CallList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_feedbackSummaries;
     }
 
@@ -212,7 +214,7 @@ class CallList extends ListResource {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -229,7 +231,7 @@ class CallList extends ListResource {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

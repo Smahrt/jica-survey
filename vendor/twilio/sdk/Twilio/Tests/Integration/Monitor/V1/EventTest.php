@@ -18,16 +18,16 @@ use Twilio\Tests\Request;
 class EventTest extends HolodeckTestCase {
     public function testFetchRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->monitor->v1->events("AEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->fetch();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
             'https://monitor.twilio.com/v1/Events/AEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
-        )));
+        ));
     }
 
     public function testFetchResponse() {
@@ -60,24 +60,24 @@ class EventTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->monitor->v1->events("AEaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")->fetch();
-        
+
         $this->assertNotNull($actual);
     }
 
     public function testReadRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->monitor->v1->events->read();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
             'https://monitor.twilio.com/v1/Events'
-        )));
+        ));
     }
 
     public function testReadFullResponse() {
@@ -123,10 +123,10 @@ class EventTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->monitor->v1->events->read();
-        
-        $this->assertTrue(count($actual) > 0);
+
+        $this->assertGreaterThan(0, count($actual));
     }
 
     public function testReadEmptyResponse() {
@@ -147,9 +147,9 @@ class EventTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->monitor->v1->events->read();
-        
+
         $this->assertNotNull($actual);
     }
 }

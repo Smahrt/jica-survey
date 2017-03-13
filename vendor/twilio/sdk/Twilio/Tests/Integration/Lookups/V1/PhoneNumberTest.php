@@ -18,16 +18,16 @@ use Twilio\Tests\Request;
 class PhoneNumberTest extends HolodeckTestCase {
     public function testFetchRequest() {
         $this->holodeck->mock(new Response(500, ''));
-        
+
         try {
             $this->twilio->lookups->v1->phoneNumbers("+987654321")->fetch();
         } catch (DeserializeException $e) {}
           catch (TwilioException $e) {}
-        
-        $this->assertTrue($this->holodeck->hasRequest(new Request(
+
+        $this->assertRequest(new Request(
             'get',
-            'https://lookups.twilio.com/v1/PhoneNumbers/+987654321'
-        )));
+            'https://lookups.twilio.com/v1/PhoneNumbers/%2B987654321'
+        ));
     }
 
     public function testFetchResponse() {
@@ -35,6 +35,11 @@ class PhoneNumberTest extends HolodeckTestCase {
             200,
             '
             {
+                "caller_name": {
+                    "caller_name": "Delicious Cheese Cake",
+                    "caller_type": "CONSUMER",
+                    "error_code": null
+                },
                 "carrier": {
                     "error_code": null,
                     "mobile_country_code": "310",
@@ -55,9 +60,9 @@ class PhoneNumberTest extends HolodeckTestCase {
             }
             '
         ));
-        
+
         $actual = $this->twilio->lookups->v1->phoneNumbers("+987654321")->fetch();
-        
+
         $this->assertNotNull($actual);
     }
 }

@@ -11,6 +11,7 @@ namespace Twilio\Rest\Taskrouter\V1\Workspace;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceContext;
+use Twilio\Options;
 use Twilio\Rest\Taskrouter\V1\Workspace\Task\ReservationList;
 use Twilio\Values;
 use Twilio\Version;
@@ -32,14 +33,14 @@ class TaskContext extends InstanceContext {
      */
     public function __construct(Version $version, $workspaceSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'workspaceSid' => $workspaceSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Workspaces/' . $workspaceSid . '/Tasks/' . $sid . '';
+
+        $this->uri = '/Workspaces/' . rawurlencode($workspaceSid) . '/Tasks/' . rawurlencode($sid) . '';
     }
 
     /**
@@ -49,13 +50,13 @@ class TaskContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new TaskInstance(
             $this->version,
             $payload,
@@ -67,12 +68,12 @@ class TaskContext extends InstanceContext {
     /**
      * Update the TaskInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return TaskInstance Updated TaskInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'Attributes' => $options['attributes'],
             'AssignmentStatus' => $options['assignmentStatus'],
@@ -80,14 +81,14 @@ class TaskContext extends InstanceContext {
             'Priority' => $options['priority'],
             'TaskChannel' => $options['taskChannel'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new TaskInstance(
             $this->version,
             $payload,
@@ -118,7 +119,7 @@ class TaskContext extends InstanceContext {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->_reservations;
     }
 
@@ -134,7 +135,7 @@ class TaskContext extends InstanceContext {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -151,7 +152,7 @@ class TaskContext extends InstanceContext {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

@@ -10,6 +10,7 @@
 namespace Twilio\Rest\Api\V2010\Account\Sip\CredentialList;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -25,15 +26,15 @@ class CredentialContext extends InstanceContext {
      */
     public function __construct(Version $version, $accountSid, $credentialListSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
             'credentialListSid' => $credentialListSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/SIP/CredentialLists/' . $credentialListSid . '/Credentials/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/SIP/CredentialLists/' . rawurlencode($credentialListSid) . '/Credentials/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -43,13 +44,13 @@ class CredentialContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new CredentialInstance(
             $this->version,
             $payload,
@@ -62,23 +63,23 @@ class CredentialContext extends InstanceContext {
     /**
      * Update the CredentialInstance
      * 
-     * @param string $username The username
-     * @param string $password The password
+     * @param array|Options $options Optional Arguments
      * @return CredentialInstance Updated CredentialInstance
      */
-    public function update($username, $password) {
+    public function update($options = array()) {
+        $options = new Values($options);
+
         $data = Values::of(array(
-            'Username' => $username,
-            'Password' => $password,
+            'Password' => $options['password'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new CredentialInstance(
             $this->version,
             $payload,

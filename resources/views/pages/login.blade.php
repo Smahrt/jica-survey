@@ -1,10 +1,9 @@
 <!-- app/views/login.blade.php -->
-@section('title', 'Login')
 
 <!doctype html>
 <html>
 <head>
-<title>JICA Data Collection App - @yield('title')</title>
+<title>Look at me Login</title>
 </head>
 <body>
 

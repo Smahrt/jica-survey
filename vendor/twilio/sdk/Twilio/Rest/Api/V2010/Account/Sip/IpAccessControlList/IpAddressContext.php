@@ -10,6 +10,7 @@
 namespace Twilio\Rest\Api\V2010\Account\Sip\IpAccessControlList;
 
 use Twilio\InstanceContext;
+use Twilio\Options;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -25,15 +26,15 @@ class IpAddressContext extends InstanceContext {
      */
     public function __construct(Version $version, $accountSid, $ipAccessControlListSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
             'ipAccessControlListSid' => $ipAccessControlListSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/SIP/IpAccessControlLists/' . $ipAccessControlListSid . '/IpAddresses/' . $sid . '.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/SIP/IpAccessControlLists/' . rawurlencode($ipAccessControlListSid) . '/IpAddresses/' . rawurlencode($sid) . '.json';
     }
 
     /**
@@ -43,13 +44,13 @@ class IpAddressContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new IpAddressInstance(
             $this->version,
             $payload,
@@ -62,24 +63,24 @@ class IpAddressContext extends InstanceContext {
     /**
      * Update the IpAddressInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return IpAddressInstance Updated IpAddressInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         $options = new Values($options);
-        
+
         $data = Values::of(array(
             'IpAddress' => $options['ipAddress'],
             'FriendlyName' => $options['friendlyName'],
         ));
-        
+
         $payload = $this->version->update(
             'POST',
             $this->uri,
             array(),
             $data
         );
-        
+
         return new IpAddressInstance(
             $this->version,
             $payload,

@@ -11,6 +11,8 @@ namespace Twilio\Rest\Api\V2010\Account;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\InstanceResource;
+use Twilio\Options;
+use Twilio\Values;
 use Twilio\Version;
 
 /**
@@ -38,22 +40,22 @@ class ConnectAppInstance extends InstanceResource {
      */
     public function __construct(Version $version, array $payload, $accountSid, $sid = null) {
         parent::__construct($version);
-        
+
         // Marshaled Properties
         $this->properties = array(
-            'accountSid' => $payload['account_sid'],
-            'authorizeRedirectUrl' => $payload['authorize_redirect_url'],
-            'companyName' => $payload['company_name'],
-            'deauthorizeCallbackMethod' => $payload['deauthorize_callback_method'],
-            'deauthorizeCallbackUrl' => $payload['deauthorize_callback_url'],
-            'description' => $payload['description'],
-            'friendlyName' => $payload['friendly_name'],
-            'homepageUrl' => $payload['homepage_url'],
-            'permissions' => $payload['permissions'],
-            'sid' => $payload['sid'],
-            'uri' => $payload['uri'],
+            'accountSid' => Values::array_get($payload, 'account_sid'),
+            'authorizeRedirectUrl' => Values::array_get($payload, 'authorize_redirect_url'),
+            'companyName' => Values::array_get($payload, 'company_name'),
+            'deauthorizeCallbackMethod' => Values::array_get($payload, 'deauthorize_callback_method'),
+            'deauthorizeCallbackUrl' => Values::array_get($payload, 'deauthorize_callback_url'),
+            'description' => Values::array_get($payload, 'description'),
+            'friendlyName' => Values::array_get($payload, 'friendly_name'),
+            'homepageUrl' => Values::array_get($payload, 'homepage_url'),
+            'permissions' => Values::array_get($payload, 'permissions'),
+            'sid' => Values::array_get($payload, 'sid'),
+            'uri' => Values::array_get($payload, 'uri'),
         );
-        
+
         $this->solution = array(
             'accountSid' => $accountSid,
             'sid' => $sid ?: $this->properties['sid'],
@@ -75,7 +77,7 @@ class ConnectAppInstance extends InstanceResource {
                 $this->solution['sid']
             );
         }
-        
+
         return $this->context;
     }
 
@@ -91,10 +93,10 @@ class ConnectAppInstance extends InstanceResource {
     /**
      * Update the ConnectAppInstance
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @return ConnectAppInstance Updated ConnectAppInstance
      */
-    public function update(array $options = array()) {
+    public function update($options = array()) {
         return $this->proxy()->update(
             $options
         );
@@ -111,12 +113,12 @@ class ConnectAppInstance extends InstanceResource {
         if (array_key_exists($name, $this->properties)) {
             return $this->properties[$name];
         }
-        
+
         if (property_exists($this, '_' . $name)) {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown property: ' . $name);
     }
 

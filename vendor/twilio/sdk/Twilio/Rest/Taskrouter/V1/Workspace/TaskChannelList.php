@@ -23,13 +23,13 @@ class TaskChannelList extends ListResource {
      */
     public function __construct(Version $version, $workspaceSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'workspaceSid' => $workspaceSid,
         );
-        
-        $this->uri = '/Workspaces/' . $workspaceSid . '/TaskChannels';
+
+        $this->uri = '/Workspaces/' . rawurlencode($workspaceSid) . '/TaskChannels';
     }
 
     /**
@@ -52,9 +52,9 @@ class TaskChannelList extends ListResource {
      */
     public function stream($limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -73,7 +73,7 @@ class TaskChannelList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TaskChannelInstance[] Array of results
      */
-    public function read($limit = null, $pageSize = Values::NONE) {
+    public function read($limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($limit, $pageSize), false);
     }
 
@@ -92,13 +92,13 @@ class TaskChannelList extends ListResource {
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new TaskChannelPage($this->version, $response, $this->solution);
     }
 

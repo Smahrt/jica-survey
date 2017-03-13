@@ -9,17 +9,20 @@ A huge thanks to all of our contributors:
 - Alex Chan 
 - Alex Rowley 
 - Alexandre Payment 
+- Andres Jaan Tack 
 - Andrew Nicols 
 - Andrew Ryno 
+- Andrew T. Baker 
 - Ben Paster 
 - Brett Gerry 
 - Bulat Shakirzyanov 
 - Carlos Diaz-Padron 
 - Chris Barr 
-- D Keith Casey Jr 
 - D. Keith Casey, Jr. 
 - Doug Black 
 - Elliot Lings 
+- Evan Fossier
+- Jarod Reyes 
 - Jen Li 
 - Jingming Niu 
 - John Britton 
@@ -28,6 +31,7 @@ A huge thanks to all of our contributors:
 - Justin Witz 
 - Keith Casey 
 - Kevin Burke 
+- Kevin Whinnery 
 - Kyle 
 - Kyle Conroy 
 - Luke Waite 

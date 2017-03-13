@@ -11,6 +11,7 @@ namespace Twilio\Rest\Api\V2010\Account\Usage;
 
 use Twilio\Exceptions\TwilioException;
 use Twilio\ListResource;
+use Twilio\Options;
 use Twilio\Rest\Api\V2010\Account\Usage\Record\AllTimeList;
 use Twilio\Rest\Api\V2010\Account\Usage\Record\DailyList;
 use Twilio\Rest\Api\V2010\Account\Usage\Record\LastMonthList;
@@ -19,6 +20,7 @@ use Twilio\Rest\Api\V2010\Account\Usage\Record\ThisMonthList;
 use Twilio\Rest\Api\V2010\Account\Usage\Record\TodayList;
 use Twilio\Rest\Api\V2010\Account\Usage\Record\YearlyList;
 use Twilio\Rest\Api\V2010\Account\Usage\Record\YesterdayList;
+use Twilio\Serialize;
 use Twilio\Values;
 use Twilio\Version;
 
@@ -52,13 +54,13 @@ class RecordList extends ListResource {
      */
     public function __construct(Version $version, $accountSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Usage/Records.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Usage/Records.json';
     }
 
     /**
@@ -69,7 +71,7 @@ class RecordList extends ListResource {
      * The results are returned as a generator, so this operation is memory
      * efficient.
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @param int $limit Upper limit for the number of records to return. stream()
      *                   guarantees to never return more than limit.  Default is no
      *                   limit
@@ -80,11 +82,11 @@ class RecordList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return \Twilio\Stream stream of results
      */
-    public function stream(array $options = array(), $limit = null, $pageSize = null) {
+    public function stream($options = array(), $limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($options, $limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -93,7 +95,7 @@ class RecordList extends ListResource {
      * Unlike stream(), this operation is eager and will load `limit` records into
      * memory before returning.
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @param int $limit Upper limit for the number of records to return. read()
      *                   guarantees to never return more than limit.  Default is no
      *                   limit
@@ -104,7 +106,7 @@ class RecordList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return RecordInstance[] Array of results
      */
-    public function read(array $options = array(), $limit = null, $pageSize = Values::NONE) {
+    public function read($options = array(), $limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($options, $limit, $pageSize), false);
     }
 
@@ -112,33 +114,29 @@ class RecordList extends ListResource {
      * Retrieve a single page of RecordInstance records from the API.
      * Request is executed immediately
      * 
-     * @param array $options Optional Arguments
+     * @param array|Options $options Optional Arguments
      * @param mixed $pageSize Number of records to return, defaults to 50
      * @param string $pageToken PageToken provided by the API
      * @param mixed $pageNumber Page Number, this value is simply for client state
      * @return \Twilio\Page Page of RecordInstance
      */
-    public function page(array $options = array(), $pageSize = Values::NONE, $pageToken = Values::NONE, $pageNumber = Values::NONE) {
+    public function page($options = array(), $pageSize = Values::NONE, $pageToken = Values::NONE, $pageNumber = Values::NONE) {
         $options = new Values($options);
         $params = Values::of(array(
             'Category' => $options['category'],
-            'StartDate<' => $options['startdateBefore'],
-            'StartDate' => $options['startDate'],
-            'StartDate>' => $options['startdateAfter'],
-            'EndDate<' => $options['enddateBefore'],
-            'EndDate' => $options['endDate'],
-            'EndDate>' => $options['enddateAfter'],
+            'StartDate' => Serialize::iso8601Date($options['startDate']),
+            'EndDate' => Serialize::iso8601Date($options['endDate']),
             'PageToken' => $pageToken,
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new RecordPage($this->version, $response, $this->solution);
     }
 
@@ -152,7 +150,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_allTime;
     }
 
@@ -166,7 +164,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_daily;
     }
 
@@ -180,7 +178,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_lastMonth;
     }
 
@@ -194,7 +192,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_monthly;
     }
 
@@ -208,7 +206,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_thisMonth;
     }
 
@@ -222,7 +220,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_today;
     }
 
@@ -236,7 +234,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_yearly;
     }
 
@@ -250,7 +248,7 @@ class RecordList extends ListResource {
                 $this->solution['accountSid']
             );
         }
-        
+
         return $this->_yesterday;
     }
 
@@ -266,7 +264,7 @@ class RecordList extends ListResource {
             $method = 'get' . ucfirst($name);
             return $this->$method();
         }
-        
+
         throw new TwilioException('Unknown subresource ' . $name);
     }
 
@@ -283,7 +281,7 @@ class RecordList extends ListResource {
         if (method_exists($property, 'getContext')) {
             return call_user_func_array(array($property, 'getContext'), $arguments);
         }
-        
+
         throw new TwilioException('Resource does not have a context');
     }
 

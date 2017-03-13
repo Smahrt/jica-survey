@@ -24,14 +24,14 @@ class IpAccessControlListContext extends InstanceContext {
      */
     public function __construct(Version $version, $trunkSid, $sid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'trunkSid' => $trunkSid,
             'sid' => $sid,
         );
-        
-        $this->uri = '/Trunks/' . $trunkSid . '/IpAccessControlLists/' . $sid . '';
+
+        $this->uri = '/Trunks/' . rawurlencode($trunkSid) . '/IpAccessControlLists/' . rawurlencode($sid) . '';
     }
 
     /**
@@ -41,13 +41,13 @@ class IpAccessControlListContext extends InstanceContext {
      */
     public function fetch() {
         $params = Values::of(array());
-        
+
         $payload = $this->version->fetch(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new IpAccessControlListInstance(
             $this->version,
             $payload,

@@ -23,13 +23,13 @@ class TranscriptionList extends ListResource {
      */
     public function __construct(Version $version, $accountSid) {
         parent::__construct($version);
-        
+
         // Path Solution
         $this->solution = array(
             'accountSid' => $accountSid,
         );
-        
-        $this->uri = '/Accounts/' . $accountSid . '/Transcriptions.json';
+
+        $this->uri = '/Accounts/' . rawurlencode($accountSid) . '/Transcriptions.json';
     }
 
     /**
@@ -52,9 +52,9 @@ class TranscriptionList extends ListResource {
      */
     public function stream($limit = null, $pageSize = null) {
         $limits = $this->version->readLimits($limit, $pageSize);
-        
+
         $page = $this->page($limits['pageSize']);
-        
+
         return $this->version->stream($page, $limits['limit'], $limits['pageLimit']);
     }
 
@@ -73,7 +73,7 @@ class TranscriptionList extends ListResource {
      *                        efficient page size, i.e. min(limit, 1000)
      * @return TranscriptionInstance[] Array of results
      */
-    public function read($limit = null, $pageSize = Values::NONE) {
+    public function read($limit = null, $pageSize = null) {
         return iterator_to_array($this->stream($limit, $pageSize), false);
     }
 
@@ -92,13 +92,13 @@ class TranscriptionList extends ListResource {
             'Page' => $pageNumber,
             'PageSize' => $pageSize,
         ));
-        
+
         $response = $this->version->page(
             'GET',
             $this->uri,
             $params
         );
-        
+
         return new TranscriptionPage($this->version, $response, $this->solution);
     }
 

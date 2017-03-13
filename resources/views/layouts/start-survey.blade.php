@@ -5,8 +5,8 @@
 
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="simpleModalLabel">Make a Call</h4>
-                <p class="category">Start a new survey by calling a contact or selecting a contact group</p>
+                <h4 class="modal-title" id="simpleModalLabel">Start a Survey</h4>
+                <p class="category">Start a new survey by selecting a contact or selecting a contact group</p>
             </div>
 
             <form action="{{url('/call')}}" method="post">
@@ -16,7 +16,7 @@
                         <div class="form-group">
                             <label class="control-label">Select Contact</label>
 
-                            <select id="contacts" name="phone_number" data-live-search="true" class="form-control">
+                            <select id="contacts" name="phone_number" class="form-control search-select">
 
                                 <option disabled selected>Select Contact</option>
                                 <option value="+2348182362521">Yoshito Kawakatsu</option>
@@ -37,7 +37,7 @@
                     <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                             <label class="control-label">Select Contact Group</label>
-                            <select id="contact-group" class="form-control">
+                            <select id="contact-group" class="form-control search-select">
                                 <option selected disabled>Select Contact Group</option>
 
                                 @foreach($res_con_type as $user_g)
@@ -77,3 +77,10 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 <!-- END CALL MODAL MARKUP -->
+
+<script>
+    $(document).ready(function(){
+           /** Select boxes search **/
+        $('.search-select').select2(); 
+    });
+</script>
