@@ -9,15 +9,16 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Controllers\Controller;
-//use Session;
+use Session;
 use Carbon;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Session;
+//use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 //use Illuminate\Support\Facades\Request;
+
 
 class MainController extends Controller
 {
@@ -55,23 +56,22 @@ class MainController extends Controller
    
     }
     
-    public function showDashboard(){
-        if($_COOKIE['first_name']="value"){
+    public function showDashboard(Request $request){
+        //$_COOKIE['login']=="haha"
+        $value = $_COOKIE['login'];
+        if($value == "haha"){
+            //return redirect()->route('');
             return view('pages.dashboard');
 
         }else{
-            echo "Session cannot find first_name";
-            // $_COOKIE['first_name'];
-            //return view('pages.login');
+            //echo "Session cannot find You";
+            //return redirect()->route('signin');
+            return view('pages.login');
         }
     }
     
     public function doLogin(Request $request){ 
-        if(session()->has('first_name')){
-            return view('pages.dashboard');
-
-        }else{
-            //create vaidation rules
+        //create vaidation rules
         $rules = array(
             'email' => 'required|email',
             'password' =>'required|alphaNum|min:4'
@@ -115,24 +115,22 @@ class MainController extends Controller
                 
                 if($userPass == $password){
 
-                    //--------------------------
+                    //updating user_sessions table
                     $mytime = Carbon\Carbon::now();
                     $time = $mytime->toDateTimeString();
                     
                     DB::connection('mysql')->select("Insert INTO user_sessions (user_id, email, date) VALUES ('$id','$email','$time')");
-                    //------------------------------
+                    //end
                     
-                    //----------------------------
-                        $request->session()->put('first_name','name');
-                        session(['first_name' => 'value']);
-                        setcookie("first_name","value",time()+5);
-                    //-----------------------------
-                    //return view('pages.dashboard',['userName'=>$userName]);
+                    //setting a cookie
+                        setcookie("login","haha");
+                    //end
+                    
                     return redirect()->route('dashboard');
                 }
                 
                 else{
-                  $error_message = "Username/ Invalid".$userPass;
+                  $error_message = "Email/Password Invalid";
 
                     return view('pages.login',['error_message' => $error_message]);
                         
@@ -140,7 +138,7 @@ class MainController extends Controller
                 
             }
         }
-        }
+        
         
     }
     
@@ -188,6 +186,11 @@ class MainController extends Controller
         return view('pages.contacts',['success_message' => $success_message]);
         
         
+    }
+    
+    public function showLogout(){
+       setcookie("login","BOY");
+        return view('pages.logout');    
     }
 
    

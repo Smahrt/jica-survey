@@ -45,11 +45,11 @@
                                 <li class="dropdown">
                                     <a href="#pablo" class="dropdown-toggle" data-toggle="dropdown">
                                        <i class="material-icons">person</i>
-<<<<<<< HEAD
+
                                        <p class=""></p>
-=======
+
                                        <p class="hidden-lg hidden-md">My Name</p>
->>>>>>> origin/master
+
                                    </a>
                                     <ul class="dropdown-menu">
                                         <li>
@@ -62,7 +62,7 @@
                                             <a href="{{ url('/contacts') }}">Contacts</a>
                                         </li>
                                         <li>
-                                            <a href="#">Logout</a>
+                                            <a href="{{ url('/logout') }}">Logout</a>
                                         </li>
                                     </ul>
                                 </li>

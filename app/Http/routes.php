@@ -95,7 +95,7 @@ Route::post(
 });*/
 
 Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'MainController@showDashboard']);
-
+Route::get('logout', ['as' => 'logout', 'uses' => 'MainController@showLogout']);
 Route::get('/contacts', function () {
     return view('pages.contacts');
 });
@@ -116,7 +116,9 @@ Route::get('/',function () {
 });
 
 // route to show the login form
-Route::get('/signin', array('uses' => 'MainController@showDashboard'));
+Route::get('signin',function () {
+    return redirect('dashboard');
+});
 
 // route to process the form
 Route::post('/signin', array('uses' => 'MainController@doLogin'));
