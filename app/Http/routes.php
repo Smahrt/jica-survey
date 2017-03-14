@@ -86,14 +86,6 @@ Route::post(
 
 //My Routes
 
-/*Route::get('/',function(){
-    return view('pages.login');
-});*/
-
-/*Route::get('/login',function(){
-    return view('pages.login');
-});*/
-
 Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'MainController@showDashboard']);
 Route::get('logout', ['as' => 'logout', 'uses' => 'MainController@showLogout']);
 Route::get('/contacts', function () {
@@ -138,7 +130,7 @@ Route::get('show/delete/{id}', array('uses' => 'MainController@deleteContact'));
 // route to the Edit-contacts page
 Route::post('show/edit/{id}', array('uses' => 'MainController@editContact'));
 
-Route::post('/tts-survey', function(Request $request){
-    echo $request->surveyTitle;
-});
+//Route to handle survey form on submit
+Route::post('/save-tts-survey', array('uses' => 'MainController@saveSurveyTTS'));
+Route::post('/save-record-survey', array('uses' => 'MainController@saveSurveyRecord'));
 

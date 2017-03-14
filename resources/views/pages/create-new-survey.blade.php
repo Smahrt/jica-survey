@@ -50,7 +50,12 @@
                     <div id="#card">
                         <!-- FRONT:: TTS pane -->
                         <div class="front">
-                            <form action="{{ url('/tts-survey') }}" method="post">
+                            
+                            <form action="{{ url('/save-tts-survey') }}" method="post">
+                                <div class="survey_hidden">
+                                    <input id="survey_type" name="survey_type" value="TTS" />
+                                    <input id="last_id" name="last_survey_id" value="1" />
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group label-floating">
@@ -76,7 +81,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">1. Question</label>
-                                                    <textarea class="form-control" name="question" placeholder="Enter your question" ></textarea>
+                                                    <textarea class="form-control" name="question_1" placeholder="Enter your question" ></textarea>
                                                 </div>
                                             </div>
                                         </div>
@@ -84,7 +89,7 @@
                                             <div class="col-md-12">
                                                 <div class="form-group">
                                                     <label class="control-label">Response Type</label>
-                                                    <select type="text" class="form-control" name="question">
+                                                    <select type="text" class="form-control" name="response_type_1">
                                                         <option disabled selected>Select Response Type</option>
                                                         <option value="free-response">Free Response</option>
                                                         <option value="yes-no">Yes/No</option>
@@ -109,7 +114,11 @@
                         
                         <!-- BACK:: Voice Recording pane -->
                         <div class="back hidden">
-                            <form>
+                            <form method="post" action="{{ url('/save-record-survey') }}">
+                                <div class="survey_hidden">
+                                    <input id="survey_type" name="survey_type" value="record" />
+                                    <input id="last_id" name="last_survey_id" value="" />
+                                </div>
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="form-group label-floating">
@@ -121,7 +130,7 @@
                                 <div class="row" id="record-0">
                                     <div class="col-md-12">
                                         <div class="form-group">
-                                            <label class="control-label">Introduction</label>
+                                            <label class="control-label">Record Introduction</label>
                                             <div id="record-ctrl-0">
                                                 <button id="start-btn-0" type="button" class="btn btn-simple btn-success start_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
                                                 <button id="stop-btn-0" type="button" class="btn btn-simple btn-danger stop_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
@@ -133,36 +142,20 @@
                                 </div>
                                 <div id="therecord">
                                     <div class="title">
-                                        <h4>Survey Questions</h4>
+                                        <h4>Record Survey Questions</h4>
                                     </div>
                                     <div id="record-1">
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">1. Question</label>
-                                                    <div id="record-ctrl-1">
-                                                        <button type="button" id="start-btn-1" class="btn btn-simple btn-success start_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
-                                                        <button type="button" id="stop-btn-1" class="btn btn-simple btn-danger stop_btn" disabled><i class="material-icons">stop</i> Stop Recording</button>
-                                                        <span id="recordLog-1"></span>
-                                                        <div class="output"></div>
-                                                    </div>
-                                                </div>
+                                                
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label class="control-label">Response Type</label>
-                                                    <select type="text" class="form-control" name="question">
-                                                        <option disabled selected>Select Response Type</option>
-                                                        <option value="free-response">Free Response</option>
-                                                        <option value="yes-no">Yes/No</option>
-                                                        <option value="numeric">Numeric</option>
-                                                    </select>
-                                                </div>
                                                 <button type="button" class="btn btn-success pull-right add-record">
                                                     Add Question
                                                 </button>
+                                                
                                             </div>
                                         </div>
                                     </div>
@@ -175,6 +168,7 @@
                                 <div class="clearfix"></div>
                             </form>
                         </div>
+                        <!-- !END BACK:: Voice Recording pane -->
                     </div>
                 </div>
             </div>
@@ -219,15 +213,15 @@
         
         /** Survey Questions Add **/
         var id = 2;
-        var i = 2;
-        
+        var i = 1;
+        /** Add TTS **/
         $('.front #thequestion').on("click", '.add-question', function(){
                     var nextquestion = `<div id="question-`+ id +`">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group label-floating">
                             <label class="control-label">`+ id +`. Question</label>
-                            <textarea class="form-control" name="question-`+ id +`" ></textarea>
+                            <textarea class="form-control" name="question_`+ id +`" ></textarea>
                         </div>
                     </div>
                 </div>
@@ -235,7 +229,7 @@
                     <div class="col-md-12">
                         <div class="form-group">
                             <label class="control-label">Response Type</label>
-                            <select type="text" class="form-control" name="questiontype-`+ id +`">
+                            <select type="text" class="form-control" name="response_type_`+ id +`">
                                 <option disabled selected>Select Response Type</option>
                                 <option value="free-response">Free Response</option>
                                 <option value="yes-no">Yes/No</option>
@@ -249,16 +243,27 @@
                 </div>
             </div>`;
             $('#thequestion').append(nextquestion);
-
+            
             $(this).removeClass("add-question").hide();
+            
+            $('.front #last_id').attr('value', id); //Update the last question id in the form
+            
             id++;
+            
         });
         
+        /** ADD Record **/
         $('.back #therecord').on("click", '.add-record', function(){
-                    var next = `<div id="record-`+ i +`">
+            var pn = i-1;
+            var getCtrl = $("#record-ctrl-"+pn+" > .output");
+            var getText = $("#recordLog-"+pn);
+            if (getCtrl.hasClass('empty')){
+                getText.text("Please record the previous question.");
+            }else{
+                var next = `<div id="record-`+ i +`">
                 <div class="row">
                     <div class="col-md-12">
-                        <div class="form-group label-floating">
+                        <div class="form-group">
                             <label class="control-label">`+ i +`. Question</label>
                                     <div id="record-ctrl-`+ i +`">
                                         <button type="button" id="start-btn-`+i+`" class="btn btn-simple btn-success start_btn"><i class="material-icons">play_arrow</i> Start Recording</button>
@@ -270,10 +275,10 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-12" id="record-type-`+ i +`">
                         <div class="form-group">
                             <label class="control-label">Response Type</label>
-                            <select type="text" class="form-control" name="questiontype-`+i+`">
+                            <select type="text" class="form-control" name="response_type_`+i+`" required>
                                 <option disabled selected>Select Response Type</option>
                                 <option value="free-response">Free Response</option>
                                 <option value="yes-no">Yes/No</option>
@@ -285,10 +290,22 @@
                         </button>
                     </div>
                 </div>`;
-            $('#therecord').append(next);
 
-            $(this).removeClass("add-record").hide();
-            i++;
+                $('#therecord').append(next);
+
+                $(this).removeClass("add-record").hide();
+
+                /** Disable Further Receording on previous Field **/
+                $('#stop-btn-'+pn).removeClass('stop_btn');
+                $('#start-btn-'+pn).removeClass('start_btn');
+                $('#record-ctrl-'+pn+' > .output button.del').remove();
+                $("#recordLog-"+pn).text("Saved Recording");
+                
+                $('.back #last_id').attr('value', i); //Update the last record id in the form
+
+                i++;
+                
+            }
         });
         
         /** Create New Survey::Functions(); **/
@@ -366,7 +383,7 @@
     }
 
     function createDownloadLink(id) {
-        var logctrl = "#record-ctrl-"+id;
+        var logctrl = "#record-ctrl-"+id + " > .output";
             recorder && recorder.exportWAV(function(blob) {
 
                 var url = URL.createObjectURL(blob);
@@ -383,12 +400,12 @@
                 span.appendChild(audio);
                 span.appendChild(hf);
                 
-                $(logctrl).after(span);
-                $(logctrl).after(delBtn);
+                $(logctrl).wrapInner(span);
+                $(logctrl+ " > span").append(delBtn);
             });
     } 
         
-        /** Add Click functions to buttons **/
+        /** Add Click functions to buttons:: START RECORD :: STOP RECORD :: DELETE RECORD **/
         
         $('body').on('click', '.start_btn', function(){
             var btn_id = $('.start_btn').attr('id'); //start-btn-(num) - 10
@@ -396,25 +413,27 @@
             
             startRecording(this, num);
             
-            $('#'+btn_id).removeClass('start_btn');
-            
         });
+        
         $('body').on('click', '.stop_btn', function(){
             var btn_id = $('.stop_btn').attr('id'); //stop-btn-(num) - 9
             var num = btn_id.slice(9).trim();
             var nextnum = parseInt(num)+1;
+
+            var record_id = "#record-ctrl-"+num;
             
             stopRecording(this, num);
-            
-            $('#'+btn_id).removeClass('stop_btn');
+            $(record_id + " > .output").removeClass('empty');
             
         });
+        
         $('body').on('click', '.del', function(){
             var del_id = $('.del').attr('id'); //del-(num) - 4
             var num = del_id.slice(4).trim();
             var record_id = "#record-ctrl-"+num;
             
-            $(record_id + " > .output").html("");
+            $(record_id + " > .output").empty().addClass('empty');
+            $("#recordLog-"+num).text("");
             
         });
         

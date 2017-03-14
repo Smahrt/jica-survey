@@ -60,7 +60,7 @@ class SurveyController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function showVoice($id, $type)
+    public function showVoice($id)
     {
         $surveyToTake = Survey::find($id);
         $voiceResponse = new Twiml();
@@ -70,11 +70,13 @@ class SurveyController extends Controller
         }
         
         $surveyTitle = $surveyToTake->title;
+        $surveyType = $surveyToTake->title;
+        $surveyIntro = $surveyToTake->intro;
         
-        if($type == "TTS"){
-            $voiceResponse->say("Welcome to the Lagos State P H C Board and thank you for taking the $surveyTitle survey! Let's get started.");
-        }else if($type == "Record"){
-		  $voiceResponse->play("No voice media"); //link to intro file
+        if($surveyType == "TTS"){
+            $voiceResponse->say("Welcome to the Lagos State P H C Board and thank you for taking this survey! Let's get started.");
+        }else if($surveyType == "record"){
+		  $voiceResponse->play($surveyIntro); //link to intro file
         }
         
         $voiceResponse->redirect($this->_urlForFirstQuestion($surveyToTake, 'voice'), ['method' => 'GET']);
@@ -98,7 +100,7 @@ class SurveyController extends Controller
         }
 
         $surveyTitle = $surveyToTake->title;
-        $voiceResponse->message("Welcome to the Lagos State P H C Board and thank you for taking the $surveyTitle survey! Let's get started.");
+        $voiceResponse->message("Welcome to the Lagos State P H C Board and thank you for taking this survey! Let's get started.");
         $voiceResponse->redirect($this->_urlForFirstQuestion($surveyToTake, 'sms'), ['method' => 'GET']);
 
         return $this->_responseWithXmlType(response($voiceResponse));

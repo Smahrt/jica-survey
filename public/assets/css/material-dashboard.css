@@ -5303,3 +5303,15 @@ a.btn-empty:hover{
 .recordingslist audio {
     vertical-align: middle;
 }
+.output {
+    width: 45%;
+    margin: 0 3%;
+}
+
+.output button.del{
+    padding: 0;
+}
+
+.survey_type{
+    opacity: 0;
+}

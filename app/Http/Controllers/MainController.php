@@ -193,8 +193,7 @@ class MainController extends Controller
         return view('pages.logout');    
     }
 
-   
-    
+    /** Handle survey save to database **/
     
 }
     
