@@ -8,7 +8,7 @@
     <div class="sidebar-wrapper">
         <ul id="main-nav" class="nav">
             <li>
-                <a href="{{ url() }}">
+                <a href="{{ url('/dashboard') }}">
                     <i class="material-icons">dashboard</i>
                     <p>Dashboard</p>
                 </a>

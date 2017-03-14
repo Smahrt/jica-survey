@@ -23,6 +23,7 @@ class AppServiceProvider extends ServiceProvider
                 $res_con_type = DB::connection('mysql2')->select('SELECT * FROM contact_type');
                 $res_survey = DB::connection('mysql')->select('SELECT * FROM surveys');
                 $error_message = "Username/Password Invalid";
+                
         
                 $view->with('res_contact',$res_contact)->with('res_con_type',$res_con_type)->with('res_survey',$res_survey);
             });

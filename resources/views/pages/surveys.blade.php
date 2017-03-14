@@ -35,11 +35,14 @@
                                         <span>View Survey Responses</span>
                                     </a>
                                     <ul class="dropdown-menu">
-                                        @foreach($res_survey as $surfn)
+                                       <?php
+                                            foreach($res_survey as $surfn){
+                                                    $string = "/survey/".$surfn->id."/results";
+                                                    $url = url($string);
+                                                echo "<li><a href=".$url.">".$surfn->title."</a></li>";
 
-                                        <!--Here--><li><a href="{{ url('/surveys//results') }}">{{ $surfn->title }}</a></li>
-
-                                        @endforeach
+                                            }
+                                        ?>
                                     </ul>
                                 </li>
                             </ul>

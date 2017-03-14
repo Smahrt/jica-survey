@@ -53,7 +53,7 @@
                                    </a>
                                     <ul class="dropdown-menu">
                                         <li>
-                                            <a href="{{ url() }}">Dashboard</a>
+                                            <a href="{{ url('/dashboard') }}">Dashboard</a>
                                         </li>
                                         <li>
                                             <a href="{{ url('/surveys') }}">Surveys</a>

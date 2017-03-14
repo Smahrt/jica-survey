@@ -192,6 +192,55 @@ class MainController extends Controller
        setcookie("login","BOY");
         return view('pages.logout');    
     }
+    
+    public function viewResponse(){
+        return view('pages.view-response');
+    }
+    
+    public function showviewResponse(){
+        $phone[] ="";
+        $i = 0;
+        $num_query = DB::connection('mysql')->select("SELECT * FROM question_responses GROUP BY session_sid");
+        foreach($num_query as $num){
+            $phone[] = $num->$session_sid;
+        }
+        
+        $length = count($phone);
+        
+        while($i<$length){
+            $result = DB::connection('mysql')->select("SELECT * FROM question_responses WHERE session_sid = '$phone[$i]'");
+            $storage[$i] =$result[$i];
+        }
+        
+        return view('pages.view-response')->with('num_query',$num_query);
+        
+    }
+    
+    public function tts(Request $request){
+        $intro = $request->input('intro');
+        $title = $request->input('survey_title');
+        $id = $request->input('last_id');
+        
+        $mytime = Carbon\Carbon::now();
+        $time = $mytime->toDateTimeString();
+        
+        DB::connection('mysql')->insert('INSERT INTO surveys(title,created_at,updated_at) values(?,?,?)', [$title,$time,$time]);
+        $get_sid = DB::connection('mysql')->select("SELECT id FROM surveys WHERE title ='$title'");
+        
+        $survey_id = $get_sid;
+        
+        
+        
+        $phc = $request->input('phc_name');
+        $officer = $request->input('officer_name');
+        $phone = $request->input('phone_number');
+        $contact_t= $request->input('contact_type_id');
+        
+        DB::connection('mysql2')->insert('INSERT INTO contacts (lga, designation, phc_name, officer_name, phone_number, contact_type_id, user_id, deleted, sms_last_wished_year, email_last_wished_year) values(?,?,?,?,?,?,?,?,?,?)',[$lga,$desig,$phc,$officer,$phone,$contact_t,'1','1','0000','0000']);
+        
+        $success_message = "Contact Created Successfully";
+        return view('pages.create-contacts',['success_message' => $success_message]);
+    }
 
     /** Handle survey save to database **/
     

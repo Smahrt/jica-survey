@@ -134,3 +134,6 @@ Route::post('show/edit/{id}', array('uses' => 'MainController@editContact'));
 Route::post('/save-tts-survey', array('uses' => 'MainController@saveSurveyTTS'));
 Route::post('/save-record-survey', array('uses' => 'MainController@saveSurveyRecord'));
 
+//route to show the contact table
+Route::get('/response', array('uses' => 'MainController@showviewResponse'));
+
