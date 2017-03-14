@@ -192,6 +192,29 @@ class MainController extends Controller
        setcookie("login","BOY");
         return view('pages.logout');    
     }
+    
+    public function viewResponse(){
+        return view('pages.view-response');
+    }
+    
+    public function showviewResponse(){
+        $phone[] ="";
+        $i = 0;
+        $num_query = DB::connection('mysql')->select("SELECT * FROM question_responses GROUP BY session_sid");
+        foreach($num_query as $num){
+            $phone[] = $num->$session_sid;
+        }
+        
+        $length = count($phone);
+        
+        while($i<$length){
+            $result = DB::connection('mysql')->select("SELECT * FROM question_responses WHERE session_sid = '$phone[$i]'");
+            $storage[$i] =$result[$i];
+        }
+        
+        return view('pages.view-response')->with('num_query',$num_query);
+        
+    }
 
    
     

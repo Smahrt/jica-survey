@@ -142,3 +142,6 @@ Route::post('/tts-survey', function(Request $request){
     echo $request->surveyTitle;
 });
 
+//route to show the contact table
+Route::get('/response', array('uses' => 'MainController@showviewResponse'));
+

@@ -27,93 +27,18 @@
         @endif
 
     </p>
-	                <div class="row">
-                        <div class="col-md-1"></div>
-	                    <div class="col-md-10">
-                            <ul class="nav navbar-nav navbar-right">
-                                <li>
-                                    <a href="{{ url('create') }}" class="btn btn-success">
-                                       <i class="material-icons">person</i>
-                                       <span>Create New Contact</span>
-                                    </a>
-                                </li>
-                                <li  style="margin: 0 0 0 10;" >
-                                    <a href="#" class="btn btn-success dropdown-toggle" data-toggle="dropdown" >
-                                        <i class="material-icons">group</i>
-                                        <span>Create Contact Group</span>
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        @foreach($res_con_type as $contactGrp)
+	               
 
-                                        <!--Here--><li><a href="{{ url('/surveys//results') }}">{{ $contactGrp->type }}</a></li>
-
-                                        @endforeach
-                                    </ul>
-                                </li>
-                                <li style="margin: 0 0 0 10;">
-                                    <a href="" class="btn btn-success">
-                                       <i class="material-icons">edit</i>
-                                       <span>Edit Contact Group</span>
-                                    </a>
-                                </li>
-                            </ul>
-                            <div class="card">
-	                            <div class="card-header" data-background-color="orange">
-	                                <h4 class="title">Contacts</h4>
-	                                <p class="category">Available contacts from all PHCs.<br/>
-                                        <span class="hidden-lg hidden-md hidden-sm"><i class="material-icons">info_outline</i> Swipe left to see full table</span>
-                                    </p>
-	                            </div>
-	                            <div class="card-content table-responsive">
-	                                <table id="contactTable" class="table">
-	                                    <thead class="text-primary">
-	                                       <tr>
-                                                <th>
-                                                    <input type="checkbox" name="optionsCheckboxes" id="checkAll" class="checkbox-me">
-                                                </th>
-                                                <th>Officer Name</th>
-                                                <th>PHC Name</th>
-                                                <th>Phone</th>
-                                                <th>Contact Group</th>
-                                                <th>Action</th>
-	                                       </tr>
-                                        </thead>
-	                                    <tbody>
-                                            @foreach ($res_contact as $user_array)
-                                            <tr>
-                                                <td>
-                                                    <input type="checkbox" name="optionsCheckboxes" class="checkContact checkbox-me">
-                                                </td>
-                                                <td>{{ $user_array->officer_name }}</td>
-                                                <td>{{ $user_array->phc_name }}</td>
-                                                <td>{{ $user_array->phone_number }}</td>
-                                                <td><?php MainController::showContactGroups($user_array->contact_type_id); ?></td>
-	                                        	<td class="td-actions text-right">
-                                                    <a href="show/{{ $user_array->cid }}">
-                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
-                                                        <i class="material-icons">edit</i>
-                                                        </button>
-                                                    </a>
-                                                    <a href="show/{{ $user_array->cid }}">
-                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
-                                                        <i class="material-icons">close</i>
-                                                        </button>
-                                                    </a>
-                                                </td> 
-                                            </tr>
-                                            @endforeach
-	                                    </tbody>
-	                                </table>
-=======
     <div class="row">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header" data-background-color="orange">
                         <h4 class="title">Contacts</h4>
                         <p>
-                            <a class="btn btn-empty btn-simple">
+                            <a href="{{ url('create') }}" class="btn btn-empty btn-simple">
                                 <i class="material-icons">create</i> Add Contact
                             </a>
+                            
                             <span class="div-sp">|</span>
                             <a class="btn btn-empty btn-simple">
                                 <i class="material-icons">group_add</i> Add 4 Contacts to Group
@@ -152,18 +77,21 @@
                                     <td>{{ $user_array->phone_number }}</td>
                                     <td><?php MainController::showContactGroups($user_array->contact_type_id); ?></td>
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                        <button type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
-                                            <i class="material-icons">close</i>
-                                        </button>
+                                                    <a href="show/{{ $user_array->cid }}">
+                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
+                                                        <i class="material-icons">edit</i>
+                                                        </button>
+                                                    </a>
+                                                    <a href="show/{{ $user_array->cid }}">
+                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
+                                                        <i class="material-icons">close</i>
+                                                        </button>
+                                                    </a>
                                     </td> 
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
->>>>>>> origin/master
 
                         
                         </div>
