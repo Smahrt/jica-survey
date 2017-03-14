@@ -5303,3 +5303,133 @@ a.btn-empty:hover{
 .recordingslist audio {
     vertical-align: middle;
 }
+
+
+/**Imported Styles**/
+section.section-account .img-backdrop {
+  background-position: center;
+  height: 0;
+}
+section.section-account .spacer {
+  display: block;
+  position: relative;
+}
+section.section-account .img-circle {
+  float: left;
+  right: 0;
+  border: 5px solid #ffffff;
+  margin-right: 20px;
+  width: 120px;
+  height: 120px;
+}
+@media (min-height: 500px) and (max-height: 700px) {
+  section.section-account .img-backdrop,
+  section.section-account .spacer {
+    height: 150px;
+  }
+  section.section-account .img-circle {
+    position: absolute;
+    top: -80px;
+    margin-right: 0;
+  }
+  section.section-account .img-backdrop {
+    -webkit-animation: backdrop-animation 0.8s ease-out;
+    -o-animation: backdrop-animation 0.8s ease-out;
+    animation: backdrop-animation 0.8s ease-out;
+    -webkit-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -moz-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -ms-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -o-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    animation: backdrop-animation 0.8s ease-out 1s ease-in;
+  }
+  section.section-account .card-body {
+    -webkit-animation: box-animation 1s ease-out;
+    -o-animation: box-animation 1s ease-out;
+    animation: box-animation 1s ease-out;
+    -webkit-animation: box-animation 1s ease-out 1s ease-in;
+    -moz-animation: box-animation 1s ease-out 1s ease-in;
+    -ms-animation: box-animation 1s ease-out 1s ease-in;
+    -o-animation: box-animation 1s ease-out 1s ease-in;
+    animation: box-animation 1s ease-out 1s ease-in;
+  }
+}
+@media (min-height: 700px) {
+  section.section-account .img-backdrop,
+  section.section-account .spacer {
+    height: 300px;
+  }
+  section.section-account .img-circle {
+    position: absolute;
+    top: -80px;
+    margin-right: 0;
+  }
+  section.section-account .img-backdrop {
+    -webkit-animation: backdrop-animation 0.8s ease-out;
+    -o-animation: backdrop-animation 0.8s ease-out;
+    animation: backdrop-animation 0.8s ease-out;
+    -webkit-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -moz-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -ms-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -o-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    animation: backdrop-animation 0.8s ease-out 1s ease-in;
+  }
+  section.section-account .card-body {
+    -webkit-animation: box-animation 1s ease-out;
+    -o-animation: box-animation 1s ease-out;
+    animation: box-animation 1s ease-out;
+    -webkit-animation: box-animation 1s ease-out 1s ease-in;
+    -moz-animation: box-animation 1s ease-out 1s ease-in;
+    -ms-animation: box-animation 1s ease-out 1s ease-in;
+    -o-animation: box-animation 1s ease-out 1s ease-in;
+    animation: box-animation 1s ease-out 1s ease-in;
+  }
+}
+
+section.section-account .spacer {
+  display: block;
+  position: relative;
+}
+section.section-account .img-circle {
+  float: left;
+  right: 0;
+  border: 5px solid #ffffff;
+  margin-right: 20px;
+  width: 120px;
+  height: 120px;
+}
+@media (min-height: 500px) and (max-height: 700px) {
+  section.section-account .img-backdrop,
+  section.section-account .spacer {
+    height: 150px;
+  }
+  section.section-account .img-circle {
+    position: absolute;
+    top: -80px;
+    margin-right: 0;
+  }
+  section.section-account .img-backdrop {
+    -webkit-animation: backdrop-animation 0.8s ease-out;
+    -o-animation: backdrop-animation 0.8s ease-out;
+    animation: backdrop-animation 0.8s ease-out;
+    -webkit-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -moz-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -ms-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    -o-animation: backdrop-animation 0.8s ease-out 1s ease-in;
+    animation: backdrop-animation 0.8s ease-out 1s ease-in;
+  }
+  section.section-account .card-body {
+    -webkit-animation: box-animation 1s ease-out;
+    -o-animation: box-animation 1s ease-out;
+    animation: box-animation 1s ease-out;
+    -webkit-animation: box-animation 1s ease-out 1s ease-in;
+    -moz-animation: box-animation 1s ease-out 1s ease-in;
+    -ms-animation: box-animation 1s ease-out 1s ease-in;
+    -o-animation: box-animation 1s ease-out 1s ease-in;
+    animation: box-animation 1s ease-out 1s ease-in;
+  }
+}
+@media (min-height: 700px) {
+  section.section-account .img-backdrop,
+  section.section-account .spacer {
+    height: 300px;
+  }
