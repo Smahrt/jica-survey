@@ -5303,7 +5303,6 @@ a.btn-empty:hover{
 .recordingslist audio {
     vertical-align: middle;
 }
-<<<<<<< HEAD
 .output {
     width: 45%;
     margin: 0 3%;
@@ -5313,11 +5312,9 @@ a.btn-empty:hover{
     padding: 0;
 }
 
-.survey_type{
+.survey_hidden{
     opacity: 0;
 }
-=======
-
 
 /**Imported Styles**/
 section.section-account .img-backdrop {
@@ -5447,4 +5444,3 @@ section.section-account .img-circle {
   section.section-account .spacer {
     height: 300px;
   }
->>>>>>> origin/master

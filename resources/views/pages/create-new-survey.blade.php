@@ -19,6 +19,12 @@
     }*/
     ?>
     <div class="row">
+        
+                            @if(isset($info))
+                                <div class="alert alert-success">
+                                    {{ $info }}
+                                </div>
+                            @endif
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <!-- Toggle Button -->
@@ -51,7 +57,7 @@
                         <!-- FRONT:: TTS pane -->
                         <div class="front">
                             
-                            <form action="{{ url('/save-tts-survey') }}" method="post">
+                            <form action="{{ url('/save-survey') }}" method="post">
                                 <div class="survey_hidden">
                                     <input id="survey_type" name="survey_type" value="TTS" />
                                     <input id="last_id" name="last_survey_id" value="1" />
@@ -91,7 +97,7 @@
                                                     <label class="control-label">Response Type</label>
                                                     <select type="text" class="form-control" name="response_type_1">
                                                         <option disabled selected>Select Response Type</option>
-                                                        <option value="free-response">Free Response</option>
+                                                        <option value="free-answer">Free Response</option>
                                                         <option value="yes-no">Yes/No</option>
                                                         <option value="numeric">Numeric</option>
                                                     </select>
@@ -114,7 +120,7 @@
                         
                         <!-- BACK:: Voice Recording pane -->
                         <div class="back hidden">
-                            <form method="post" action="{{ url('/save-record-survey') }}">
+                            <form id="record-form" method="post" action="{{ url('/save-survey') }}">
                                 <div class="survey_hidden">
                                     <input id="survey_type" name="survey_type" value="record" />
                                     <input id="last_id" name="last_survey_id" value="" />
@@ -123,7 +129,7 @@
                                     <div class="col-md-12">
                                         <div class="form-group label-floating">
                                             <label class="control-label">Survey Title</label>
-                                            <input type="text" class="form-control" name="surveyTitle" >
+                                            <input type="text" class="form-control" name="surveyTitle" id="surveyTitle" >
                                         </div>
                                     </div>
                                 </div>
@@ -178,8 +184,13 @@
 @endsection
 
 @section('scripts')
+
 <script type="text/javascript">
     $(document).ready(function(){
+        
+        var audio_context;
+        var recorder;
+        
         /** Switch Forms on Button Toggle **/
         var back = $('.back');
         var front = $('.front');
@@ -198,6 +209,7 @@
                 
                 //Check for recording capabilities on browser
                 init();
+                
             }else{
                 /** If TTS is selected **/
                 
@@ -231,7 +243,7 @@
                             <label class="control-label">Response Type</label>
                             <select type="text" class="form-control" name="response_type_`+ id +`">
                                 <option disabled selected>Select Response Type</option>
-                                <option value="free-response">Free Response</option>
+                                <option value="free-answer">Free Response</option>
                                 <option value="yes-no">Yes/No</option>
                                 <option value="numeric">Numeric</option>
                             </select>
@@ -278,9 +290,9 @@
                     <div class="col-md-12" id="record-type-`+ i +`">
                         <div class="form-group">
                             <label class="control-label">Response Type</label>
-                            <select type="text" class="form-control" name="response_type_`+i+`" required>
+                            <select type="text" class="form-control" name="response_type_`+i+`" id="response_type_`+i+`" required>
                                 <option disabled selected>Select Response Type</option>
-                                <option value="free-response">Free Response</option>
+                                <option value="free-answer">Free Response</option>
                                 <option value="yes-no">Yes/No</option>
                                 <option value="numeric">Numeric</option>
                             </select>
@@ -299,7 +311,21 @@
                 $('#stop-btn-'+pn).removeClass('stop_btn');
                 $('#start-btn-'+pn).removeClass('start_btn');
                 $('#record-ctrl-'+pn+' > .output button.del').remove();
+                
+                /** Save Recording **/
+                var audioData = $("#record-ctrl-"+pn + " > .output > span > audio").attr("id");
+                
+                //Sending the audio file to the upload.php script
+                $.post('/upload', {
+                    rawAudioData: audioData,
+                    audio_id: pn
+                }, function(a){
+                   console.log(a.res); 
+                });
+                
                 $("#recordLog-"+pn).text("Saved Recording");
+                /** END:: Save recording **/
+                
                 
                 $('.back #last_id').attr('value', i); //Update the last record id in the form
 
@@ -316,32 +342,31 @@
         console.log(logInfo);
     }
     
-    var audio_context;
-    var recorder;
-    
+        
     function init() {
-                    try {
-                      // webkit shim
-                      window.AudioContext = window.AudioContext || window.webkitAudioContext;
-                        //added support for firefox
-                      navigator.getUserMedia = ( navigator.getUserMedia ||
-                                       navigator.webkitGetUserMedia ||
-                                       navigator.mozGetUserMedia ||
-                                       navigator.msGetUserMedia);
+        try {
+          // webkit shim
+          window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            //added support for firefox
+          navigator.getUserMedia = ( navigator.getUserMedia ||
+                           navigator.webkitGetUserMedia ||
+                           navigator.mozGetUserMedia ||
+                           navigator.msGetUserMedia);
 
-                      window.URL = window.URL || window.webkitURL;
+          window.URL = window.URL || window.webkitURL;
 
-                      audio_context = new AudioContext;
-                      __log('Audio context set up.');
-                      __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
-                    } catch (e) {
-                      alert('No web audio support in this browser!');
-                    }
+          audio_context = new AudioContext;
+          __log('Audio context set up.');
+          __log('navigator.getUserMedia ' + (navigator.getUserMedia ? 'available.' : 'not present!'));
+} catch (e) {
+          alert('No web audio support in this browser!');
+        }
 
-                    navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
+        navigator.getUserMedia({audio: true}, startUserMedia, function(e) {
                       __log('No live audio input: ' + e);
                     });
     }
+        
         
     function startUserMedia(stream) {
         var input = audio_context.createMediaStreamSource(stream);
@@ -364,7 +389,6 @@
         btn.nextElementSibling.disabled = false;
         $(logid).text('Recording...');
 
-        recorder.clear();
     }
 
     function stopRecording(btn, id) {
@@ -384,9 +408,11 @@
 
     function createDownloadLink(id) {
         var logctrl = "#record-ctrl-"+id + " > .output";
+        
             recorder && recorder.exportWAV(function(blob) {
-
+                
                 var url = URL.createObjectURL(blob);
+                //var dataURL = blobToDataURL(blob, function(url);
                 var span = document.createElement('span');
                 var audio = document.createElement('audio');
                 var hf = document.createElement('a');
@@ -400,8 +426,19 @@
                 span.appendChild(audio);
                 span.appendChild(hf);
                 
+                //Test this
+                var reader = new window.FileReader();
+                reader.readAsDataURL(blob); 
+                reader.onloadend = function() {
+                            dataURL = reader.result; // Base64 data
+                            
+                            $(logctrl+ " > span > audio").attr("id", dataURL);
+                }
+                //--END test 
+                
                 $(logctrl).wrapInner(span);
                 $(logctrl+ " > span").append(delBtn);
+                
             });
     } 
         
@@ -435,6 +472,21 @@
             $(record_id + " > .output").empty().addClass('empty');
             $("#recordLog-"+num).text("");
             
+        });
+        
+        /** HERE::Sending Data to server **/
+        $(".back #record-form").submit(function () {
+            event.preventDefault();
+            
+            //post record form data
+            $.post('/save-survey', {
+                last_id: $('#last_id').val(),
+                survey_type: $('#survey_type').val(),
+                survey_title: $('#survey_title').val()
+                
+            }, function(res){
+               alert(res); 
+            });
         });
         
 });

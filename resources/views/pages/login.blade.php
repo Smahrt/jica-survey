@@ -99,13 +99,13 @@ if(isset ($_POST['submit'])){
                     <header>User Log in</header>
                 </div>
                 <div class="card-body">
-                    <form class="form" action="signin" accept-charset="utf-8" method="post">
+                    <form class="form" action="{{ url('/signin') }}" accept-charset="utf-8" method="post">
                         <div class="form-group">
-                            <input type="text" class="form-control" required autocomplete="off" id="user" name="user">
+                            <input type="text" class="form-control" required autocomplete="off" name="email">
                             <label for="user">Username</label>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control" required autocomplete="off" id="password" name="pass">
+                            <input type="password" class="form-control" required autocomplete="off" name="password">
                             <label for="password">Password</label>
                         </div>
                         <br/>

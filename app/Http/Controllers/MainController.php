@@ -11,6 +11,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Session;
 use Carbon;
+use Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 //use Illuminate\Support\Facades\Session;
@@ -82,7 +83,7 @@ class MainController extends Controller
         
         //conditions
         if ($validator->fails()){
-            return Redirect::to('login')
+            return Redirect::to('signin')
                 ->withErrors($validator)
                 ->withInput(Input::except('password'));
        
@@ -216,33 +217,71 @@ class MainController extends Controller
         
     }
     
-    public function tts(Request $request){
-        $intro = $request->input('intro');
-        $title = $request->input('survey_title');
-        $id = $request->input('last_id');
-        
-        $mytime = Carbon\Carbon::now();
-        $time = $mytime->toDateTimeString();
-        
-        DB::connection('mysql')->insert('INSERT INTO surveys(title,created_at,updated_at) values(?,?,?)', [$title,$time,$time]);
-        $get_sid = DB::connection('mysql')->select("SELECT id FROM surveys WHERE title ='$title'");
-        
-        $survey_id = $get_sid;
-        
-        
-        
-        $phc = $request->input('phc_name');
-        $officer = $request->input('officer_name');
-        $phone = $request->input('phone_number');
-        $contact_t= $request->input('contact_type_id');
-        
-        DB::connection('mysql2')->insert('INSERT INTO contacts (lga, designation, phc_name, officer_name, phone_number, contact_type_id, user_id, deleted, sms_last_wished_year, email_last_wished_year) values(?,?,?,?,?,?,?,?,?,?)',[$lga,$desig,$phc,$officer,$phone,$contact_t,'1','1','0000','0000']);
-        
-        $success_message = "Contact Created Successfully";
-        return view('pages.create-contacts',['success_message' => $success_message]);
-    }
-
     /** Handle survey save to database **/
+    public function saveSurvey(Request $request){
+            $intro = $request->surveyIntro;
+            $title = $request->surveyTitle;
+            $q_num = $request->last_survey_id;
+            $type = $request->survey_type;
+            $gli = DB::connection('mysql')->select("SELECT * FROM surveys"); //Select the last id in the survey table
+            $gli_count = count($gli);
+            $get_sid = $gli_count+1;
+        
+        if($type == "TTS"){
+            echo $q_num;
+            $mytime = Carbon\Carbon::now();
+            $time = $mytime->toDateTimeString();
+
+            DB::connection('mysql')->insert('INSERT INTO surveys(title,type,intro,created_at,updated_at) values(?,?,?,?,?)', [$title,$type, $intro,$time,$time]);
+            
+            if($get_sid == ""){
+                echo "This is empty - ".$get_sid;
+            }
+            else{
+                $i = 1;
+
+                while($i <= $q_num){
+                    $qname = "question_".$i;
+                    $rname = "response_type_".$i;
+
+                    $q = $request->$qname;
+                    $r = $request->$rname;
+
+                    DB::connection('mysql')->insert('INSERT INTO questions(body,kind,survey_id,created_at,updated_at) values(?,?,?,?,?)', [$q, $r, $get_sid, $time, $time]);
+                    
+                    $i++;
+                }
+                $info = "Survey has been successfully saved!";
+            }
+            return redirect()->back()->with('info', $info);
+            
+        }else if($type == "record"){
+            
+            
+        }
+        
+    }
+    
+    public function uploadSurveyAudio(Request $request){
+        $audio = $request->rawAudioData; //fetch the raw base64 data
+        $id = $request->audio_id; //fetch the audio id
+        $sid = $request->survey_id; //fetch the audio id
+        
+        $raw_audio = str_replace('data:audio/wav;base64,', '', $audio); //strip the base64 header
+        $decoded = base64_decode($raw_audio); //decode base64
+        
+        $d = date("Y-m-d"); $t = date("h-i-s");
+        
+        $audio_url = "record-".$d.$t."-".$id.".wav";
+        $path = public_path().'/assets/uploads/'.$audio_url;
+
+        $fname = "test".".wav";
+        $handle = fopen($path,'w');
+        fwrite($handle, $decoded);
+        fclose($handle);
+
+        return response()->json(['res' => $path]);
+    }
     
 }
     
