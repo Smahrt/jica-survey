@@ -22,19 +22,19 @@
     ?>
 
     <p>
-        @if(isset($success_message))
-             {!!$success_message !!}
+        @if(session()->has('success_message'))
+             {!! session('success_message') !!}
         @endif
     </p>
-        
-        <?php if( isset($error) ): ?>
-                    <div class="alert alert-danger" role="alert">
-                        <?php echo $error; ?>
-                    </div>
-            <?php endif; ?>
 
-    
-	               
+    <?php
+        if(session()->has('success_message')){
+             session('success_message');
+        }
+        
+    ?>
+        
+      
 
     <div class="row">
             <div class="col-md-8">
@@ -91,11 +91,9 @@
                                     <td>{{ $user_array->phone_number }}</td>
                                     <td><?php MainController::showContactGroups($user_array->contact_type_id); ?></td>
                                     <td class="td-actions text-right">
-                                                    <a href=href="#" data-toggle="modal" data-target="#callEdit" class="btn btn-empty btn-simple">
-                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
+                                                        <button data-toggle="modal" data-target="#callEdit" id="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs edit" data-original-title="Edit Contact">
                                                         <i class="material-icons">edit</i>
                                                         </button>
-                                                    </a>
                                                     <a href="{{$d_url}}">
                                                         <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
                                                         <i class="material-icons">close</i>
@@ -143,6 +141,10 @@
                 </div>
             </div> 
 </div>
+
+
+                        @include('layouts.add-contacts')
+                        @include('layouts.edit-contacts')
 @endsection
 
 @section('scripts')
@@ -182,6 +184,24 @@
         }
     } );
      
+    $('body').on('click', '.edit', function(event){
+        $cid = $(this).attr("id");
+        
+       $.post('/edit', 'cid='+$cid, function(res){
+          
+           //set form action
+           var form = $('#edit-contact-form');
+           
+           form.attr("action", "edit/"+$cid);
+           $('#lga').val(res.gc[0]);
+           $('#designation').val(res.gc[1]);
+           $('#phc_name').val(res.gc[2]);
+           $('#officer_name').val(res.gc[3]);
+           $('#phone_number').val(res.gc[4]);
+       });
+        
+    });
+        
     });
 
 </script>

@@ -157,9 +157,20 @@ class MainController extends Controller
         return view('pages.contacts',['success_message' => $success_message]);
     }
     
-    public function showContact($id){
-        $contact = DB::connection('mysql2')->select('SELECT * FROM contacts where id =?', [$id]);
-        return view('pages.show-contacts',['contact'=>$contact]);
+    public function showContact(Request $request){
+        $id = $request->cid;
+        $getcon = DB::connection('mysql2')->select('SELECT * FROM contacts where id =?', [$id]);
+        //return view('pages.contacts',['contact'=>$getcon]);
+        $contact = array();
+        
+        foreach($getcon as $con){
+            $contact[0] = $con->lga;
+            $contact[1] = $con->designation;
+            $contact[2] = $con->phc_name;
+            $contact[3] = $con->officer_name;
+            $contact[4] = $con->phone_number;
+        }
+       return response()->json(['gc'=>$contact]);
     }   
     
     public function editContact(Request $request, $id){
@@ -170,7 +181,8 @@ class MainController extends Controller
         DB::connection('mysql2')->update("UPDATE contacts SET phc_name='$phc', officer_name='$officer', phone_number='$phone'  WHERE id ='$id'");
         
         $success_message = "Contact Updated Successfully";
-        return view('pages.contacts',['success_message' => $success_message]);
+        return Redirect('contacts')->with('success_message',[$success_message]);
+        //return view('pages.contacts',['success_message' => $success_message]);
         
         
     }

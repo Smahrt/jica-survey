@@ -116,7 +116,7 @@ Route::get('signin',function () {
 Route::post('/signin', array('uses' => 'MainController@doLogin'));
 
 // route to the show-contacts page
-Route::get('/show/{id}', array('uses' => 'MainController@showContact'));
+Route::post('/edit', array('uses' => 'MainController@showContact'));
 
 // route to the view-create-contacts page
 Route::get('create', array('uses' => 'MainController@viewCreate'));
@@ -128,7 +128,7 @@ Route::post('insert', array('uses' => 'MainController@createContact'));
 Route::get('/delete/{id}', array('uses' => 'MainController@deleteContact'));
 
 // route to the Edit-contacts page
-Route::post('show/edit/{id}', array('uses' => 'MainController@editContact'));
+Route::post('/edit/{id}', array('uses' => 'MainController@editContact'));
 
 //Route to handle survey form on submit
 Route::post('/save-tts-survey', array('uses' => 'MainController@saveSurveyTTS'));
