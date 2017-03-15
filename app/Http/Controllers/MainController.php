@@ -181,7 +181,8 @@ class MainController extends Controller
         DB::connection('mysql2')->update("UPDATE contacts SET phc_name='$phc', officer_name='$officer', phone_number='$phone'  WHERE id ='$id'");
         
         $success_message = "Contact Updated Successfully";
-        return Redirect('contacts')->with('success_message',[$success_message]);
+        return Redirect('contacts');
+        //return Redirect('contacts')->with('success_message',['Contact Updated Successfully']);
         //return view('pages.contacts',['success_message' => $success_message]);
         
         
@@ -192,8 +193,8 @@ class MainController extends Controller
         DB::connection('mysql2')->delete('DELETE FROM contacts where id =?',[$id]);
         
         $success_message = "Contact Deleted Successfully";
-        //return Redirect('contacts');
-        return view('pages.contacts',['success_message' => $success_message]);
+        return Redirect('contacts');
+        //return view('pages.contacts',['success_message' => $success_message]);
         
         
     }

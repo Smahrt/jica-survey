@@ -89,15 +89,34 @@ Route::post(
 Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'MainController@showDashboard']);
 Route::get('logout', ['as' => 'signin', 'uses' => 'MainController@showLogout']);
 Route::get('/contacts', function () {
-    return view('pages.contacts');
+    $value = $_COOKIE['login'];
+        if($value == "login"){
+            return view('pages.contacts');
+
+        }else{
+            return redirect('signin');
+        }
 });
 
 Route::get('/surveys', function () {
-    return view('pages.surveys');
+    $value = $_COOKIE['login'];
+        if($value == "login"){
+            return view('pages.surveys');
+
+        }else{
+            return redirect('signin');
+        }
 });
 
 Route::get('/create-new-survey', function () {
-    return view('pages.create-new-survey');
+    $value = $_COOKIE['login'];
+        if($value == "login"){
+          return view('pages.create-new-survey');
+
+        }else{
+            return redirect('signin');
+        }
+  
 });
 
 //Login routes

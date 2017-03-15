@@ -27,12 +27,6 @@
         @endif
     </p>
 
-    <?php
-        if(session()->has('success_message')){
-             session('success_message');
-        }
-        
-    ?>
         
       
 
@@ -116,7 +110,7 @@
                         <h4 class="title">Contact Groups</h4>
                         <p>
                             <a class="btn btn-empty btn-simple">
-                                <i class="material-icons">create</i> Add Group
+                                <i class="material-icons">pageview</i> Add Group
                             </a>
                         </p>
                         <p class="hidden-lg hidden-md hidden-sm"><i class="material-icons">info_outline</i> Swipe left to see full table</p>
