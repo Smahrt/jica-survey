@@ -57,16 +57,15 @@ class MainController extends Controller
     }
     
     public function showDashboard(Request $request){
-        //$_COOKIE['login']=="haha"
         $value = $_COOKIE['login'];
-        if($value == "haha"){
-            //return redirect()->route('');
+        if($value == "login"){
             return view('pages.dashboard');
 
         }else{
             //echo "Session cannot find You";
             //return redirect()->route('signin');
-            return view('pages.login');
+            //return view('pages.login');
+            return redirect('signin');
         }
     }
     
@@ -123,7 +122,7 @@ class MainController extends Controller
                     //end
                     
                     //setting a cookie
-                        setcookie("login","haha");
+                        setcookie("login","login");
                     //end
                     
                     return redirect()->route('dashboard');
@@ -142,10 +141,6 @@ class MainController extends Controller
         
     }
     
-     public function viewCreate(){
-        return view('pages.create-contacts');
-    } 
-    
     public function createContact(Request $request){
         $lga = $request->input('lga');
         $desig = $request->input('designation');
@@ -157,7 +152,9 @@ class MainController extends Controller
         DB::connection('mysql2')->insert('INSERT INTO contacts (lga, designation, phc_name, officer_name, phone_number, contact_type_id, user_id, deleted, sms_last_wished_year, email_last_wished_year) values(?,?,?,?,?,?,?,?,?,?)',[$lga,$desig,$phc,$officer,$phone,$contact_t,'1','1','0000','0000']);
         
         $success_message = "Contact Created Successfully";
-        return view('pages.create-contacts',['success_message' => $success_message]);
+        
+        //return Redirect('contacts')->with(['success_message',$success_message]);
+        return view('pages.contacts',['success_message' => $success_message]);
     }
     
     public function showContact($id){
@@ -183,14 +180,15 @@ class MainController extends Controller
         DB::connection('mysql2')->delete('DELETE FROM contacts where id =?',[$id]);
         
         $success_message = "Contact Deleted Successfully";
+        //return Redirect('contacts');
         return view('pages.contacts',['success_message' => $success_message]);
         
         
     }
     
     public function showLogout(){
-       setcookie("login","BOY");
-        return view('pages.logout');    
+       setcookie("login","logout");
+        return redirect('/');   
     }
     
     public function viewResponse(){
@@ -216,33 +214,6 @@ class MainController extends Controller
         
     }
     
-    public function tts(Request $request){
-        $intro = $request->input('intro');
-        $title = $request->input('survey_title');
-        $id = $request->input('last_id');
-        
-        $mytime = Carbon\Carbon::now();
-        $time = $mytime->toDateTimeString();
-        
-        DB::connection('mysql')->insert('INSERT INTO surveys(title,created_at,updated_at) values(?,?,?)', [$title,$time,$time]);
-        $get_sid = DB::connection('mysql')->select("SELECT id FROM surveys WHERE title ='$title'");
-        
-        $survey_id = $get_sid;
-        
-        
-        
-        $phc = $request->input('phc_name');
-        $officer = $request->input('officer_name');
-        $phone = $request->input('phone_number');
-        $contact_t= $request->input('contact_type_id');
-        
-        DB::connection('mysql2')->insert('INSERT INTO contacts (lga, designation, phc_name, officer_name, phone_number, contact_type_id, user_id, deleted, sms_last_wished_year, email_last_wished_year) values(?,?,?,?,?,?,?,?,?,?)',[$lga,$desig,$phc,$officer,$phone,$contact_t,'1','1','0000','0000']);
-        
-        $success_message = "Contact Created Successfully";
-        return view('pages.create-contacts',['success_message' => $success_message]);
-    }
-
-    /** Handle survey save to database **/
     
 }
     

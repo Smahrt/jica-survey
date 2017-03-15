@@ -25,8 +25,15 @@
         @if(isset($success_message))
              {!!$success_message !!}
         @endif
-
     </p>
+        
+        <?php if( isset($error) ): ?>
+                    <div class="alert alert-danger" role="alert">
+                        <?php echo $error; ?>
+                    </div>
+            <?php endif; ?>
+
+    
 	               
 
     <div class="row">
@@ -35,7 +42,7 @@
                     <div class="card-header" data-background-color="orange">
                         <h4 class="title">Contacts</h4>
                         <p>
-                            <a href="{{ url('create') }}" class="btn btn-empty btn-simple">
+                            <a href="#" data-toggle="modal" data-target="#callCreate" class="btn btn-empty btn-simple">
                                 <i class="material-icons">create</i> Add Contact
                             </a>
                             
@@ -68,6 +75,13 @@
                             </thead>
                             <tbody>
                                 @foreach ($res_contact as $user_array)
+                                    <?php
+                                        $del_string = "/delete/".$user_array->cid;
+                                        $d_url = url($del_string);
+                                        
+                                        $sh_string = "/show/".$user_array->cid;
+                                        $s_url = url($sh_string);
+                                    ?>
                                 <tr>
                                     <td>
                                         <input type="checkbox" name="optionsCheckboxes" class="checkContact checkbox-me">
@@ -77,12 +91,12 @@
                                     <td>{{ $user_array->phone_number }}</td>
                                     <td><?php MainController::showContactGroups($user_array->contact_type_id); ?></td>
                                     <td class="td-actions text-right">
-                                                    <a href="show/{{ $user_array->cid }}">
+                                                    <a href=href="#" data-toggle="modal" data-target="#callEdit" class="btn btn-empty btn-simple">
                                                         <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
                                                         <i class="material-icons">edit</i>
                                                         </button>
                                                     </a>
-                                                    <a href="show/{{ $user_array->cid }}">
+                                                    <a href="{{$d_url}}">
                                                         <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
                                                         <i class="material-icons">close</i>
                                                         </button>

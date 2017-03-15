@@ -78,6 +78,9 @@
                         @yield('content')
                         
                         @include('layouts.start-survey')
+                        @include('layouts.add-contacts')
+                        @include('layouts.edit-contacts')
+                        
                         
                     </div>
 

@@ -87,7 +87,7 @@ Route::post(
 //My Routes
 
 Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'MainController@showDashboard']);
-Route::get('logout', ['as' => 'logout', 'uses' => 'MainController@showLogout']);
+Route::get('logout', ['as' => 'signin', 'uses' => 'MainController@showLogout']);
 Route::get('/contacts', function () {
     return view('pages.contacts');
 });
@@ -104,12 +104,12 @@ Route::get('/create-new-survey', function () {
 
 // route to show the login form
 Route::get('/',function () {
-    return view('pages.login');
+    return redirect('dashboard');
 });
 
-// route to show the login form
 Route::get('signin',function () {
-    return redirect('dashboard');
+    setcookie("login","boy");
+    return view('pages.login');
 });
 
 // route to process the form
@@ -125,7 +125,7 @@ Route::get('create', array('uses' => 'MainController@viewCreate'));
 Route::post('insert', array('uses' => 'MainController@createContact'));
 
 // route to the Delete-contacts page
-Route::get('show/delete/{id}', array('uses' => 'MainController@deleteContact'));
+Route::get('/delete/{id}', array('uses' => 'MainController@deleteContact'));
 
 // route to the Edit-contacts page
 Route::post('show/edit/{id}', array('uses' => 'MainController@editContact'));
