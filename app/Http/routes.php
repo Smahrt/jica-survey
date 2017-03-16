@@ -87,36 +87,55 @@ Route::post(
 //My Routes
 
 Route::get('dashboard', ['as' => 'dashboard', 'uses' => 'MainController@showDashboard']);
-Route::get('logout', ['as' => 'logout', 'uses' => 'MainController@showLogout']);
+Route::get('logout', ['as' => 'signin', 'uses' => 'MainController@showLogout']);
 Route::get('/contacts', function () {
-    return view('pages.contacts');
+    $value = $_COOKIE['login'];
+        if($value == "login"){
+            return view('pages.contacts');
+
+        }else{
+            return redirect('signin');
+        }
 });
 
 Route::get('/surveys', function () {
-    return view('pages.surveys');
+    $value = $_COOKIE['login'];
+        if($value == "login"){
+            return view('pages.surveys');
+
+        }else{
+            return redirect('signin');
+        }
 });
 
 Route::get('/create-new-survey', function () {
-    return view('pages.create-new-survey');
+    $value = $_COOKIE['login'];
+        if($value == "login"){
+          return view('pages.create-new-survey');
+
+        }else{
+            return redirect('signin');
+        }
+  
 });
 
 //Login routes
 
 // route to show the login form
 Route::get('/',function () {
-    return view('pages.login');
+    return redirect('dashboard');
 });
 
-// route to show the login form
 Route::get('signin',function () {
-    return redirect('dashboard');
+    setcookie("login","boy");
+    return view('pages.login');
 });
 
 // route to process the form
 Route::post('/signin', array('uses' => 'MainController@doLogin'));
 
 // route to the show-contacts page
-Route::get('/show/{id}', array('uses' => 'MainController@showContact'));
+Route::post('/edit', array('uses' => 'MainController@showContact'));
 
 // route to the view-create-contacts page
 Route::get('create', array('uses' => 'MainController@viewCreate'));
@@ -125,10 +144,10 @@ Route::get('create', array('uses' => 'MainController@viewCreate'));
 Route::post('insert', array('uses' => 'MainController@createContact'));
 
 // route to the Delete-contacts page
-Route::get('show/delete/{id}', array('uses' => 'MainController@deleteContact'));
+Route::get('/delete/{id}', array('uses' => 'MainController@deleteContact'));
 
 // route to the Edit-contacts page
-Route::post('show/edit/{id}', array('uses' => 'MainController@editContact'));
+Route::post('/edit/{id}', array('uses' => 'MainController@editContact'));
 
 //Route to handle survey form on submit
 Route::post('/save-survey', array('uses' => 'MainController@saveSurvey'));

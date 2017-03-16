@@ -11,7 +11,6 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Session;
 use Carbon;
-use Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Input;
 //use Illuminate\Support\Facades\Session;
@@ -58,16 +57,15 @@ class MainController extends Controller
     }
     
     public function showDashboard(Request $request){
-        //$_COOKIE['login']=="haha"
         $value = $_COOKIE['login'];
-        if($value == "haha"){
-            //return redirect()->route('');
+        if($value == "login"){
             return view('pages.dashboard');
 
         }else{
             //echo "Session cannot find You";
             //return redirect()->route('signin');
-            return view('pages.login');
+            //return view('pages.login');
+            return redirect('signin');
         }
     }
     
@@ -124,7 +122,7 @@ class MainController extends Controller
                     //end
                     
                     //setting a cookie
-                        setcookie("login","haha");
+                        setcookie("login","login");
                     //end
                     
                     return redirect()->route('dashboard');
@@ -143,10 +141,6 @@ class MainController extends Controller
         
     }
     
-     public function viewCreate(){
-        return view('pages.create-contacts');
-    } 
-    
     public function createContact(Request $request){
         $lga = $request->input('lga');
         $desig = $request->input('designation');
@@ -158,12 +152,24 @@ class MainController extends Controller
         DB::connection('mysql2')->insert('INSERT INTO contacts (lga, designation, phc_name, officer_name, phone_number, contact_type_id, user_id, deleted, sms_last_wished_year, email_last_wished_year) values(?,?,?,?,?,?,?,?,?,?)',[$lga,$desig,$phc,$officer,$phone,$contact_t,'1','1','0000','0000']);
         
         $success_message = "Contact Created Successfully";
-        return view('pages.create-contacts',['success_message' => $success_message]);
+        
+        //return Redirect('contacts')->with(['success_message',$success_message]);
+        return view('pages.contacts',['success_message' => $success_message]);
     }
     
-    public function showContact($id){
-        $contact = DB::connection('mysql2')->select('SELECT * FROM contacts where id =?', [$id]);
-        return view('pages.show-contacts',['contact'=>$contact]);
+    public function showContact(Request $request){
+        $id = $request->cid;
+        $getcon = DB::connection('mysql2')->select('SELECT * FROM contacts where id =?', [$id]);
+        $contact = array();
+        
+        foreach($getcon as $con){
+            $contact[0] = $con->lga;
+            $contact[1] = $con->designation;
+            $contact[2] = $con->phc_name;
+            $contact[3] = $con->officer_name;
+            $contact[4] = $con->phone_number;
+        }
+       return response()->json(['gc'=>$contact]);
     }   
     
     public function editContact(Request $request, $id){
@@ -174,7 +180,9 @@ class MainController extends Controller
         DB::connection('mysql2')->update("UPDATE contacts SET phc_name='$phc', officer_name='$officer', phone_number='$phone'  WHERE id ='$id'");
         
         $success_message = "Contact Updated Successfully";
-        return view('pages.contacts',['success_message' => $success_message]);
+        return Redirect('contacts');
+        //return Redirect('contacts')->with('success_message',['Contact Updated Successfully']);
+        //return view('pages.contacts',['success_message' => $success_message]);
         
         
     }
@@ -184,14 +192,15 @@ class MainController extends Controller
         DB::connection('mysql2')->delete('DELETE FROM contacts where id =?',[$id]);
         
         $success_message = "Contact Deleted Successfully";
-        return view('pages.contacts',['success_message' => $success_message]);
+        return Redirect('contacts');
+        //return view('pages.contacts',['success_message' => $success_message]);
         
         
     }
     
     public function showLogout(){
-       setcookie("login","BOY");
-        return view('pages.logout');    
+       setcookie("login","logout");
+        return redirect('/');   
     }
     
     public function viewResponse(){
@@ -272,13 +281,21 @@ class MainController extends Controller
         
         $d = date("Y-m-d"); $t = date("h-i-s");
         
-        $audio_url = "record-".$d.$t."-".$id.".wav";
-        $path = public_path().'/assets/uploads/'.$audio_url;
-
-        $fname = "test".".wav";
-        $handle = fopen($path,'w');
-        fwrite($handle, $decoded);
-        fclose($handle);
+        $audio_file_name = "record-".$d."-".$t."-".$sid."-".$id.".wav";
+        $tmpath = '/assets/tmp/'; //Temporary upload directory
+        $finalpath = '/assets/uploads/'; //Final upload directory
+        $host = 'localhost:8000'; //Local Server
+        
+        $localhostpath = $host.$finalpath.$audio_file_name; //Path to local server file
+        
+        $fullpath = public_path().$finalpath.$audio_file_name; //Path to any server file
+        $fulltmpath = public_path().$tmpath.$audio_file_name; //Temporary Path to any server file
+        
+        //Saving to file directory
+        
+        //$handle = fopen($fullpath,'w');
+        //fwrite($handle, $decoded);
+        //fclose($handle);
 
         return response()->json(['res' => $path]);
     }

@@ -22,12 +22,13 @@
     ?>
 
     <p>
-        @if(isset($success_message))
-             {!!$success_message !!}
+        @if(session()->has('success_message'))
+             {!! session('success_message') !!}
         @endif
-
     </p>
-	               
+
+        
+      
 
     <div class="row">
             <div class="col-md-8">
@@ -35,7 +36,7 @@
                     <div class="card-header" data-background-color="orange">
                         <h4 class="title">Contacts</h4>
                         <p>
-                            <a href="{{ url('create') }}" class="btn btn-empty btn-simple">
+                            <a href="#" data-toggle="modal" data-target="#callCreate" class="btn btn-empty btn-simple">
                                 <i class="material-icons">create</i> Add Contact
                             </a>
                             
@@ -68,6 +69,13 @@
                             </thead>
                             <tbody>
                                 @foreach ($res_contact as $user_array)
+                                    <?php
+                                        $del_string = "/delete/".$user_array->cid;
+                                        $d_url = url($del_string);
+                                        
+                                        $sh_string = "/show/".$user_array->cid;
+                                        $s_url = url($sh_string);
+                                    ?>
                                 <tr>
                                     <td>
                                         <input type="checkbox" name="optionsCheckboxes" class="checkContact checkbox-me">
@@ -77,12 +85,10 @@
                                     <td>{{ $user_array->phone_number }}</td>
                                     <td><?php MainController::showContactGroups($user_array->contact_type_id); ?></td>
                                     <td class="td-actions text-right">
-                                                    <a href="show/{{ $user_array->cid }}">
-                                                        <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs" data-original-title="Edit Contact">
+                                                        <button data-toggle="modal" data-target="#callEdit" id="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-primary btn-simple btn-xs edit" data-original-title="Edit Contact">
                                                         <i class="material-icons">edit</i>
                                                         </button>
-                                                    </a>
-                                                    <a href="show/{{ $user_array->cid }}">
+                                                    <a href="{{$d_url}}">
                                                         <button value="{{ $user_array->cid }}" type="button" rel="tooltip" title="" class="btn btn-danger btn-simple btn-xs" data-original-title="Remove Contact">
                                                         <i class="material-icons">close</i>
                                                         </button>
@@ -104,7 +110,7 @@
                         <h4 class="title">Contact Groups</h4>
                         <p>
                             <a class="btn btn-empty btn-simple">
-                                <i class="material-icons">create</i> Add Group
+                                <i class="material-icons">pageview</i> Add Group
                             </a>
                         </p>
                         <p class="hidden-lg hidden-md hidden-sm"><i class="material-icons">info_outline</i> Swipe left to see full table</p>
@@ -129,6 +135,10 @@
                 </div>
             </div> 
 </div>
+
+
+                        @include('layouts.add-contacts')
+                        @include('layouts.edit-contacts')
 @endsection
 
 @section('scripts')
@@ -168,6 +178,24 @@
         }
     } );
      
+    $('body').on('click', '.edit', function(event){
+        $cid = $(this).attr("id");
+        
+       $.post('/edit', 'cid='+$cid, function(res){
+          
+           //set form action
+           var form = $('#edit-contact-form');
+           
+           form.attr("action", "edit/"+$cid);
+           $('#lga').val(res.gc[0]);
+           $('#designation').val(res.gc[1]);
+           $('#phc_name').val(res.gc[2]);
+           $('#officer_name').val(res.gc[3]);
+           $('#phone_number').val(res.gc[4]);
+       });
+        
+    });
+        
     });
 
 </script>

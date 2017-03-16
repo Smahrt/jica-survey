@@ -16,7 +16,7 @@
     @if(isset($success_message))
          {!!$success_message !!}
     @endif
-   
+
 </p>
 </div>
 <form action="/insert" method="post">
@@ -33,5 +33,6 @@
     </select>
     <input type="submit" value="Add Contact"/>
 </form>
-</body>
-</html>
+
+
+

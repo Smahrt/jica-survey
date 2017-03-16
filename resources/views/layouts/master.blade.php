@@ -79,6 +79,7 @@
                         
                         @include('layouts.start-survey')
                         
+                        
                     </div>
 
                 </div>

@@ -226,6 +226,7 @@
         /** Survey Questions Add **/
         var id = 2;
         var i = 1;
+        var audio_paths = []; //contains all audio recorded for a particular survey;
         /** Add TTS **/
         $('.front #thequestion').on("click", '.add-question', function(){
                     var nextquestion = `<div id="question-`+ id +`">
@@ -269,8 +270,10 @@
             var pn = i-1;
             var getCtrl = $("#record-ctrl-"+pn+" > .output");
             var getText = $("#recordLog-"+pn);
-            if (getCtrl.hasClass('empty')){
-                getText.text("Please record the previous question.");
+            var selected = $("#response_type_"+pn).val();
+            
+            if (getCtrl.hasClass('empty') && selected != "Select Response Type"){
+                getText.text("Please add a recording for this question/Select a Response Type before proceeding.");
             }else{
                 var next = `<div id="record-`+ i +`">
                 <div class="row">
@@ -315,12 +318,12 @@
                 /** Save Recording **/
                 var audioData = $("#record-ctrl-"+pn + " > .output > span > audio").attr("id");
                 
-                //Sending the audio file to the upload.php script
+                //Sending the audio file to the upload controller
                 $.post('/upload', {
                     rawAudioData: audioData,
                     audio_id: pn
                 }, function(a){
-                   console.log(a.res); 
+                    audio_paths += a.res; //The length of this array - 1 gives the total num of questions recorded
                 });
                 
                 $("#recordLog-"+pn).text("Saved Recording");
@@ -477,6 +480,15 @@
         /** HERE::Sending Data to server **/
         $(".back #record-form").submit(function () {
             event.preventDefault();
+            
+            var res_type = [];
+            var x = 0; //a count var
+            
+            while(x < i){
+                res_type = $("#response_type_"+x).val(); //Get the question type for each recorded question
+                
+                x++;
+            }
             
             //post record form data
             $.post('/save-survey', {
