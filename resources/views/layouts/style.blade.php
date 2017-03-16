@@ -4,6 +4,7 @@
     <!--  Material Dashboard CSS    -->
     {!! HTML::style('assets/css/material-dashboard.css') !!}
     {!! HTML::style('assets/css/bootstrap-select.min.css') !!}
+    {!! HTML::style('assets/css/custom.css') !!}
 
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     {!! HTML::style('assets/css/demo.css') !!}
