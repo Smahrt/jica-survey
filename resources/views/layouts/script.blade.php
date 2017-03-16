@@ -11,6 +11,11 @@
     
     <!-- My Plugins -->
     {!! HTML::script('assets/js/bootstrap-select.min.js') !!}
+    {!! HTML::script('assets/js/tableExport/tableExport.js') !!}
+    {!! HTML::script('assets/js/tableExport/jquery.base64.js') !!}
+    {!! HTML::script('assets/js/tableExport/jspdf/jspdf.js') !!}
+    {!! HTML::script('assets/js/tableExport/jspdf/libs/base64.js') !!}
+    {!! HTML::script('assets/js/tableExport/jspdf/libs/sprintf.js') !!}
     
 
 	<!-- Material Dashboard DEMO methods, don't include it in your project! -->

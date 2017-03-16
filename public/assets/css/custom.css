@@ -1,0 +1,14 @@
+@media print{
+    #form{display:block;
+        background-color: blue;
+        font-size: 5px;
+    }
+    
+    .panel-body{
+         background-color: blue;
+    }
+    
+}
+ .panel-body{
+         background-color: blue;
+    }
